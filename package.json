@@ -4,9 +4,15 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "start" : "node dist/server.js"
+
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }

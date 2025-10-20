@@ -39,7 +39,7 @@ form.addEventListener("submit", (e) => {
   if (res.ok) {
     alert("Registro exitoso. Ahora podés iniciar sesión.");
     form.reset();
-    window.location.href = "./index.html";
+    window.location.href = "./login.html";
   } else {
     errorBox.textContent = res.message || "No se pudo registrar el usuario.";
   }
