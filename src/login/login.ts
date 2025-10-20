@@ -1,32 +1,27 @@
-import { loginUser } from "../auth/auth.js";
+const loginForm = document.getElementById("loginForm") as HTMLFormElement | null;
+const loginError = document.getElementById("loginError") as HTMLParagraphElement | null;
 
-const form = document.getElementById("loginForm") as HTMLFormElement;
-const emailInput = document.getElementById("loginEmail") as HTMLInputElement;
-const passInput  = document.getElementById("loginPass") as HTMLInputElement;
-const errorBox   = document.getElementById("loginError") as HTMLParagraphElement;
-const recoverBtn = document.getElementById("recoverBtn") as HTMLButtonElement;
-
-form.addEventListener("submit", (e) => {
+loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  errorBox.textContent = "";
+  if (loginError) loginError.textContent = "";
 
-  const email = emailInput.value.trim();
-  const pass  = passInput.value;
+  const email = (document.getElementById("loginEmail") as HTMLInputElement).value.trim();
+  const password = (document.getElementById("loginPass") as HTMLInputElement).value;
 
-  if (!email || !pass) {
-    errorBox.textContent = "Completá email y contraseña.";
-    return;
+  try {
+    const resp = await fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await resp.json();
+    if (!data.ok) {
+      if (loginError) loginError.textContent = data.message || "Credenciales inválidas";
+      return;
+    }
+    alert(`Bienvenida/o ${data.user.firstName}`);
+    // window.location.href = "./dashboard.html";
+  } catch {
+    if (loginError) loginError.textContent = "Error de red.";
   }
-
-  const res = loginUser(email, pass);
-  if (res.ok) {
-    alert("¡Bienvenido!");
-    form.reset();
-  } else {
-    errorBox.textContent = res.message || "No se pudo iniciar sesión.";
-  }
-});
-
-recoverBtn.addEventListener("click", () => {
-  alert("Recuperación de contraseña aún no implementada.");
 });
