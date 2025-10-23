@@ -1,4 +1,4 @@
-const cupones: string[] = ["vte10", "perro"];
+const cupones: string[] = JSON.parse(localStorage.getItem("cupones") || '["vte10", "perro"]');
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("compraForm") as HTMLFormElement;
@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let mensaje = "";
 
         if (cupones.includes(cupon)) {
-            descuento = compra * 0.1;
-            mensaje = "Cupón válido aplicado (10% de descuento)";
+            descuento = compra * 0.2;
+            mensaje = "Cupón válido aplicado (20% de descuento)";
         } else if (cupon.length > 0) {
             mensaje = "Cupón inválido (no se aplicó descuento)";
         } else {
