@@ -20,51 +20,52 @@
 #pacientes a {
   color: white;
   text-decoration: none;
-}
-
-#pacientes a:visited {
-  color: white;
+  margin-right: 20px;
 }
 
 #pacientes a:hover {
   color: #ccc;
 }
 
-#pacientes a:active {
-  color: #aaa;
+/* NUEVO CUADRO PARA WHATSAPP */
+.mensajesBox {
+  background-color: #004b37e5;
+  color: white;
+  text-align: center;
+  margin: 60px 40px 20px 40px;
+  border-radius: 25px;
+  padding: 15px;
+  font-family: Arial, sans-serif;
 }
 
-#pacientes a {
-  margin-right: 20px;
+.mensajesBox a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.mensajesBox a:hover {
+  color: #ccc;
 }
 
 .lista {
-  margin-top: 150px;
+  margin-top: 40px;
   background-color: #003828e5;
   color: white;
   text-align: left;
   border-radius: 64px 63px 39px 39px;
-  -webkit-border-radius: 64px 63px 39px 39px;
-  -moz-border-radius: 64px 63px 39px 39px;
   font-family: Arial, sans-serif;
   margin-left: 40px;
   margin-right: 40px;
 }
 
 #pruebas {
-  padding: 10px;
-  padding-bottom: 50px;
-}
-
-#pruebas{
-  display: flex; 
+  display: flex;
   justify-content: space-evenly;
-  
+  padding: 10px 10px 50px 10px;
 }
-
 
 #tituloConsultas {
   text-align: center;
   margin-bottom: 199px;
-  margin-top: 0px;
 }
