@@ -1,67 +1,71 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 
 export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  passwordHash: string; // bcrypt hash
 }
 
-const DATA_DIR = path.join(__dirname, "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
+const USERS_FILE = path.join(process.cwd(), "users.json");
 
-// cargar usuarios desde users.json
 function loadUsers(): User[] {
   try {
-    if (!existsSync(USERS_FILE)) {
-      // crea un archivo vacio si no existe
-      mkdirSync(DATA_DIR, { recursive: true });
-      writeFileSync(USERS_FILE, "[]", "utf8");
-      return [];
-    }
-
-    const data = readFileSync(USERS_FILE, "utf8");
-    return JSON.parse(data || "[]");
-  } catch (error) {
-    console.error("Error al cargar usuarios:", error);
+    const raw = readFileSync(USERS_FILE, "utf-8");
+    return JSON.parse(raw) as User[];
+  } catch {
     return [];
   }
 }
-// esto guarda los usuarios en users.json
-function saveUsers(users: User[]): void {
-  try {
-    mkdirSync(DATA_DIR, { recursive: true });
-    writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
-  } catch (error) {
-    console.error("Error al guardar usuarios:", error);
+
+function saveUsers(users: User[]) {
+  writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
+}
+
+export async function registerUser(data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}) {
+  const { firstName, lastName, email, password } = data;
+
+  if (!firstName || !lastName || !email || !password) {
+    return { ok: false, message: "Faltan datos" };
   }
-}
 
-export function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-export function registerUser(newUser: User): { ok: boolean; message?: string } {
   const users = loadUsers();
-
-  if (users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase())) {
+  const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (exists) {
     return { ok: false, message: "El email ya está registrado." };
   }
 
-  users.push(newUser);
+  const rounds = 12;
+  const passwordHash = await bcrypt.hash(password, rounds);
+
+  users.push({ firstName, lastName, email, passwordHash });
   saveUsers(users);
-  return { ok: true, message: "Usuario registrado con éxito." };
+
+  return { ok: true, message: "Usuario creado" };
 }
 
-export function loginUser(email: string, password: string): { ok: boolean; message?: string } {
+export async function loginUser(data: { email: string; password: string }) {
+  const { email, password } = data;
   const users = loadUsers();
+  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) {
+    return { ok: false, message: "Email o contraseña incorrectos." };
+  }
+  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!valid) {
+    return { ok: false, message: "Email o contraseña incorrectos." };
+  }
 
-  const user = users.find(
-    u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-  );
-
-  return user
-    ? { ok: true, message: "Inicio de sesión exitoso." }
-    : { ok: false, message: "Email o contraseña incorrectos." };
+  return {
+    ok: true,
+    message: "Login correcto",
+    user: { firstName: user.firstName, lastName: user.lastName, email: user.email },
+  };
 }
