@@ -183,3 +183,8 @@ footer i {
   nav ul { display: none; }
   .cards { grid-template-columns: 1fr; }
 }
+
+a {
+  color: black;
+  text-decoration: none;
+}
