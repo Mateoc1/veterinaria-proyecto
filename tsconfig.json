@@ -9,6 +9,6 @@
     "rootDir": "Backend",
     "outDir": "dist"
   },
-  "include": ["src", "Backend/appointment", "Backend/auth", "Backend/adminCupones.ts", "Backend/cupon.ts", "Backend/ecomerce", "Backend/register.ts", "Backend/server.ts"],
+  "include": ["Backend/**/*", "src"],
   "exclude": ["node_modules", "dist"]
 }
