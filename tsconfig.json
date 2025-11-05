@@ -7,8 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "Backend",
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": ["./Backend/types", "./node_modules/@types"]
   },
-  "include": ["Backend/**/*", "src"],
+  "include": ["Backend/**/*.ts", "Backend/types/**/*.d.ts", "src"],
   "exclude": ["node_modules", "dist"]
 }

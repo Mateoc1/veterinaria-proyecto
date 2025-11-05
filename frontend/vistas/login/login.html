@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Login</title>
-  <link rel="stylesheet" href="/frontend/styles/loginStyles.css">
-  <link rel="icon" href="data:,">
 </head>
 <body>
-    <span id="inicio">
-      <h1>Iniciar sesión</h1>
-    </span>
+  <h2>Login</h2>
 
-    <form id="loginForm" novalidate>
-      <label>Email:</label>
-      <input type="email" id="loginEmail" required>
-      <br>
-      <label>Contraseña:</label>
-      <input type="password" id="loginPass" required>
-      <br>
-      <p id="loginError" style="color:red;"></p>
-      <button type="submit">Ingresar</button>
-      <button type="button" id="recoverBtn">Recuperar contraseña</button>
-      <a href="../register/register.html">Crear cuenta</a>
-    </form>
+  <form id="loginForm">
+    <label>Email:</label>
+    <input type="email" id="email" required><br>
+    <label>Contrasena:</label>
+    <input type="password" id="password" required><br>
+    <button type="submit">Ingresar</button>
+  </form>
 
-  <script src="./dist/login.js" type="module"></script>
+  <button id="forgotBtn">Recuperar contrasena</button>
+  <p id="msg"></p>
+
+  <script>
+    const API = "http://localhost:3001";
+    const TARGET = "/frontend/vistas/index.html";  // <- destino despues de login
+
+    document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const res = await fetch(API + "/api/login", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        credentials: "include",
+        body: JSON.stringify({email, password})
+      });
+      const data = await res.json();
+      if(data.ok){
+        window.location.href = TARGET;
+      } else {
+        document.getElementById("msg").textContent = data.error || "Error al iniciar sesion";
+      }
+    });
+
+    document.getElementById("forgotBtn").addEventListener("click", async ()=>{
+      const email = document.getElementById("email").value.trim();
+      if(!email){alert("Ingresa un email primero"); return;}
+      const res = await fetch(API + "/api/forgot-password", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({email})
+      });
+      await res.json();
+      alert("Si existe una cuenta con ese email, se envio el link de recuperacion.");
+    });
+  </script>
 </body>
 </html>
-
