@@ -6,9 +6,13 @@
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
-    "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": ["./Backend/types", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "Backend/types/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["Backend/**/*.ts", "Backend/types/**/*.d.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
