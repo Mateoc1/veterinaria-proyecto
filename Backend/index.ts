@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { registerUser, loginUser } from "./auth/auth";
+import { registerUser, loginUser, initAuthSchema } from "./auth/auth";
 import prisma from "./lib/prisma";
 
 const app = express();
@@ -9,6 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Inicializar esquema de autenticación al arrancar
+initAuthSchema().catch(console.error);
 
 app.get("/", (_req, res) => {
   res.send("Servidor funcionando correctamente 🚀");
@@ -40,20 +43,24 @@ app.get("/db/health", async (_req, res) => {
 app.post("/auth/register", async (req, res) => {
   try {
     const result = await registerUser(req.body);
-    const status = result.ok ? 201 : 400;
-    res.status(status).json(result);
-  } catch (e) {
-    res.status(500).json({ ok: false, message: "Error en el servidor" });
+    res.status(201).json({ ok: true, ...result });
+  } catch (e: any) {
+    const message = e?.message || "Error en el servidor";
+    res.status(400).json({ ok: false, message });
   }
 });
 
 app.post("/auth/login", async (req, res) => {
   try {
-    const result = await loginUser(req.body);
-    const status = result.ok ? 200 : 401;
-    res.status(status).json(result);
-  } catch (e) {
-    res.status(500).json({ ok: false, message: "Error en el servidor" });
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ ok: false, message: "Email y contraseña son requeridos" });
+    }
+    const result = await loginUser(email, password);
+    res.status(200).json({ ok: true, ...result });
+  } catch (e: any) {
+    const message = e?.message || "Error en el servidor";
+    res.status(401).json({ ok: false, message });
   }
 });
 

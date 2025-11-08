@@ -5,7 +5,17 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
-const DB_PATH = process.env.DATABASE_PATH || "./src/database/basededatos.sqlite";
+// Extraer la ruta del archivo desde DATABASE_URL de Prisma
+// Formato: "file:./src/database/basededatos.sqlite"
+const getDatabasePath = (): string => {
+  const dbUrl = process.env.DATABASE_URL;
+  if (dbUrl && dbUrl.startsWith("file:")) {
+    return dbUrl.replace("file:", "");
+  }
+  return process.env.DATABASE_PATH || "./src/database/basededatos.sqlite";
+};
+
+const DB_PATH = getDatabasePath();
 
 let dbPromise: Promise<Database<sqlite3.Database, sqlite3.Statement>> | null = null;
 
