@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model cliente {
+  idusuario   Int      @id @default(autoincrement())
+  mail        String
+  contrasena  String   @map("contraseña")
+
+  // relations
+  animales    animal[] @relation("ClienteAnimales")
+
+  @@map("cliente")
+}
+
+model formulario {
+  idformulario               Int    @id @default(autoincrement())
+  tipo_vivienda              String
+  espacio_seguro             String
+  tiempo_solo                Int
+  personas_encasa            Int
+  familia_deacuerdo          String
+  otras_mascotas_anteriormente String
+  tipo                       String
+  eventos                    String
+  otras_mascotas_actualmente Int
+  tipo_mascotas_actual       String
+  recursos                   String
+  vacunar_y_esterilizar      String
+  encargado_cuidado          String
+  sitio_animal_solo          String
+  rol_del_animal             String
+  estado                     String
+
+  @@map("formulario")
+}
+
+model productos {
+  idproducto Int     @id @default(autoincrement())
+  nombre     String?
+  url_imagen String?
+  stock      Int?
+
+  // relations
+  compras    compra[]
+
+  @@map("productos")
+}
+
+model compra {
+  idcompra Int  @id @default(autoincrement())
+  producto Int?
+  unidades Int?
+  precio   Int?
+
+  // relations
+  productoRef productos? @relation(fields: [producto], references: [idproducto])
+
+  @@map("compra")
+}
+
+model animal {
+  idanimal   Int      @id @default(autoincrement())
+  nombre     String?
+  edad       Int?
+  descripcion String?
+  imagen_m   String?
+  dueno      Int?     @map("dueño")
+
+  // relations
+  duenoRef cliente? @relation("ClienteAnimales", fields: [dueno], references: [idusuario])
+  turnos    turno[]
+  perfiles  perfil[]
+  historiales historial_medico[]
+
+  @@map("animal")
+}
+
+model turno {
+  idturno Int    @id @default(autoincrement())
+  mascota Int?
+  motivo  String?
+  fecha   String?
+  estado  String
+
+  // relations
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+
+  @@map("turno")
+}
+
+model perfil {
+  idperfil Int    @id @default(autoincrement())
+  nombre   String?
+  mascota  Int?
+
+  // relations
+  mascotaRef animal?     @relation(fields: [mascota], references: [idanimal])
+  consultas  consultas[]
+
+  @@map("perfil")
+}
+
+model consultas {
+  idconsulta  Int     @id @default(autoincrement())
+  nombre      Int?
+  descripcion String?
+
+  // relations
+  perfilRef perfil? @relation(fields: [nombre], references: [idperfil])
+
+  @@map("consultas")
+}
+
+model historial_medico {
+  idhistorial    Int     @id @default(autoincrement())
+  mascota        Int?
+  turnos_pasados String?
+  vacunas        String?
+
+  // relations
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+
+  @@map("historial_medico")
+}

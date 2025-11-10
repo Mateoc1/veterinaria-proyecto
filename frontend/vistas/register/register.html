@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Registro</title>
-  <link rel="stylesheet" href="/frontend/styles/registerStyles.css">
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 </head>
-
 <body>
+
   <header>
     <a href="/frontend/vistas/index.html">
     <div>
@@ -21,27 +16,50 @@
   </header>
 
   <form id="registerForm" novalidate>
+
     <label>Nombre:</label>
-    <input type="text" id="firstName" required>
-    <br>
+    <input type="text" id="name" required><br>
+
     <label>Apellido:</label>
-    <input type="text" id="lastName" required>
-    <br>
+    <input type="text" id="lastname" required><br>
+
     <label>Email:</label>
-    <input type="email" id="regEmail" required>
-    <br>
-    <label>Contraseña:</label>
-    <input type="password" id="regPass" required>
-    <br>
-    <label>Confirmar Contraseña:</label>
-    <input type="password" id="regPass2" required>
-    <br>
-    <p id="regError" style="color:red;"></p>
+    <input type="email" id="email" required><br>
+
+    <label>Contrasena:</label>
+    <input type="password" id="password" required><br>
+
     <button type="submit">Registrar</button>
-    <a href="../login/login.html">Volver al login</a>
   </form>
 
-  <script src="./dist/register.js" type="module"></script>
-</body>
+  <p id="msg"></p>
+  <a href="../login/login.html">Volver al login</a>
 
+  <script>
+    const API = "http://localhost:3001";
+
+    document.getElementById("registerForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const lastname = document.getElementById("lastname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const res = await fetch(API + "/api/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        credentials: "include",
+        body: JSON.stringify({name, lastname, email, password})
+      });
+      const data = await res.json();
+
+      if(data.ok){
+        document.getElementById("msg").textContent = "Registro exitoso";
+        setTimeout(()=> window.location.href = "../login/login.html", 1000);
+      } else {
+        document.getElementById("msg").textContent = data.error || "Error al registrar";
+      }
+    });
+  </script>
+</body>
 </html>
