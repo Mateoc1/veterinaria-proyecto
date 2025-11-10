@@ -22,9 +22,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^6.18.0",
-    "@prisma/client": "^6.18.0",
+    "@prisma/adapter-better-sqlite3": "^6.19.0",
+    "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.1",
     "connect-sqlite3": "^0.9.16",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
