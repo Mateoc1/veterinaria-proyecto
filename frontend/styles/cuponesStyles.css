@@ -10,7 +10,7 @@ body {
 }
 
 h1 {
-  color: #1f7872;
+  color: #FF9F43;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -33,7 +33,7 @@ th, td {
 
 th {
   background-color: #eaf7f6;
-  color: #006a63;
+  color: #FFC97E;
 }
 
 tr:hover {
@@ -41,7 +41,7 @@ tr:hover {
 }
 
 button {
-  background-color: #20b2aa;
+  background-color: #FF9F43;
   border: none;
   color: white;
   padding: 0.5rem 1rem;
@@ -51,7 +51,7 @@ button {
 }
 
 button:hover {
-  background-color: #1a9b95;
+  background-color: #FFC97E;
 }
 
 input, select {
