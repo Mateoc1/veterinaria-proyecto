@@ -10,7 +10,7 @@ body {
 }
 
 h1 {
-  color: #1f7872;
+  color: #FF9F43;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -29,7 +29,7 @@ form {
 label {
   font-weight: 600;
   margin-bottom: 0.3rem;
-  color: #1f7872;
+  color: #FF9F43;
 }
 
 input {
@@ -41,13 +41,13 @@ input {
 }
 
 input:focus {
-  border-color: #20b2aa;
+  border-color: #FF9F43;
   box-shadow: 0 0 4px rgba(32, 178, 170, 0.4);
 }
 
 button {
   margin-top: 1.2rem;
-  background-color: #20b2aa;
+  background-color: #FF9F43;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -58,17 +58,17 @@ button {
 }
 
 button:hover {
-  background-color: #1a9b95;
+  background-color: #FFC97E;
 }
 
 h2 {
-  color: #1f7872;
+  color: #FF9F43;
   margin-top: 2rem;
   text-align: center;
 }
 
 a {
-  color: #20b2aa;
+  color: #000000;
   text-decoration: none;
   font-weight: 500;
 }
