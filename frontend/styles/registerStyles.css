@@ -8,25 +8,48 @@ body {
 }
 
 header {
-  width: 100%;
-  background-color: #FF9F43;
+  background: #FF9F43;
   padding: 8px 0;
+  width: 100%;
   margin-bottom: 80px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-  color: #2E2E2E;
-  font-size: 30px;
+nav {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 }
 
-header div {
+.logo {
+  font-size: 1.5rem;
+  color: var(--encabezado);
+  font-weight: bold;
+}
+
+.logo i {
+  color: var(--acento);
+  margin-right: 8px;
+}
+
+nav ul {
   display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center;
-  gap: 10px;
-  margin-left: 100px;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--acento);
 }
 
 form {
