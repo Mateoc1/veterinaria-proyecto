@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Veterinaria - Consulta</title>
+  <link rel="stylesheet" href="/frontend/styles/adopciones.css" />
+</head>
+<body id="app">
+  <header id="encabezado">
+    <div id="logo">VETERINARIA</div>
+    <nav id="nav">
+      <a class="enlace">INICIO</a>
+      <a class="enlace">ADOPTAR</a>
+      <a class="enlace">TIENDA</a>
+      <a class="enlace activo">CONSULTA</a>
+      <a class="enlace">PERFIL</a>
+    </nav>
+  </header>
+
+  <main id="contenedor">
+    <section id="izquierda">
+      <div id="instrucciones">
+        <h2>Seleccionar mascota:</h2>
+        <div id="selector">
+          <div id="listaMascotas" class="fila"></div>
+        </div>
+        <div id="avisoPerfil">No tenés mascotas registradas. Agrega una mascota desde el formulario.</div>
+      </div>
+
+      <div id="solicitar">
+        <h3>Solicitar consulta</h3>
+        <label>Motivo:</label>
+        <textarea id="motivo" rows="4"></textarea>
+        <button id="btnSolicitar" class="boton">Enviar consulta</button>
+      </div>
+    </section>
+
+    <aside id="derecha">
+      <div id="panelAgregar" class="tarjeta">
+        <h3>Gestionar mascotas</h3>
+        <form id="formularioAgregar">
+          <input id="inputNombre" placeholder="Nombre" required />
+          <input id="inputEspecie" placeholder="Especie" required />
+          <input id="inputFoto" placeholder="URL foto (opcional)" />
+          <label class="filaFiltro">
+            <input type="checkbox" id="inputAdoptable" />
+            Adoptable
+          </label>
+          <div class="botonera">
+            <button id="btnAgregar" class="boton" type="submit">Agregar mascota</button>
+            <button id="btnLimpiar" class="boton" type="button">Limpiar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="panelFiltro" class="tarjeta">
+        <h3>Ver animales</h3>
+        <label class="filaFiltro">
+          <input type="checkbox" id="filtroAdoptables" />
+          Ver solo adoptables
+        </label>
+        <div id="listaAdopciones"></div>
+      </div>
+
+      <div id="calendario" class="tarjeta">
+        <h3>Calendario</h3>
+        <div id="miniCalendario">[calendario visual]</div>
+      </div>
+    </aside>
+  </main>
+
+  <footer id="pie">© Veterinaria</footer>
+
+  <script src="/dist/adopciones.js" type="module"></script>
+</body>
+</html>

@@ -1,16 +1,62 @@
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f4f9fc;
-  color: #333;
+  color: white;
   margin: 0;
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+header {
+  background: #6063FF;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: 40px;
+}
+
+nav {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  color: var(--encabezado);
+  font-weight: bold;
+}
+
+.logo i {
+  color: var(--acento);
+  margin-right: 8px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--acento);
+}
+
 h1 {
-  color: #1f7872;
+  color: #6063FF;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -33,7 +79,7 @@ th, td {
 
 th {
   background-color: #eaf7f6;
-  color: #006a63;
+  color: #B3A7FF;
 }
 
 tr:hover {
@@ -41,7 +87,7 @@ tr:hover {
 }
 
 button {
-  background-color: #20b2aa;
+  background-color: #6063FF;
   border: none;
   color: white;
   padding: 0.5rem 1rem;
@@ -51,7 +97,7 @@ button {
 }
 
 button:hover {
-  background-color: #1a9b95;
+  background-color: #B3A7FF;
 }
 
 input, select {

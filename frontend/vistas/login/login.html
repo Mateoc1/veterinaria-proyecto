@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+  <link rel="stylesheet" href="/frontend/styles/loginStyles.css">
 </head>
+
 <body>
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-paw"></i> VetCare</div>
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="#">Adopciones</a></li>
+        <li><a href="#">Tienda</a></li>
+        <li><a href="#">Mis Mascotas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
   <h2>Login</h2>
 
   <form id="loginForm">
@@ -22,35 +38,36 @@
     const API = "http://localhost:3001";
     const TARGET = "/frontend/vistas/index.html";  // <- destino despues de login
 
-    document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const res = await fetch(API + "/api/login", {
         method: "POST",
-        headers: {"Content-Type":"application/json"},
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({ email, password })
       });
       const data = await res.json();
-      if(data.ok){
+      if (data.ok) {
         window.location.href = TARGET;
       } else {
         document.getElementById("msg").textContent = data.error || "Error al iniciar sesion";
       }
     });
 
-    document.getElementById("forgotBtn").addEventListener("click", async ()=>{
+    document.getElementById("forgotBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
-      if(!email){alert("Ingresa un email primero"); return;}
+      if (!email) { alert("Ingresa un email primero"); return; }
       const res = await fetch(API + "/api/forgot-password", {
         method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({email})
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
       });
       await res.json();
       alert("Si existe una cuenta con ese email, se envio el link de recuperacion.");
     });
   </script>
 </body>
+
 </html>
