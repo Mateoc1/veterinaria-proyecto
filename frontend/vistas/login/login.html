@@ -10,29 +10,38 @@
   <form id="loginForm">
     <label>Email:</label>
     <input type="email" id="email" required><br>
+
     <label>Contrasena:</label>
     <input type="password" id="password" required><br>
+
     <button type="submit">Ingresar</button>
   </form>
 
-  <button id="forgotBtn">Recuperar contrasena</button>
+  <button id="forgotBtn">Recuperar contraseña</button>
+
+  <!-- 🔵 Botón nuevo -->
+  <button id="goRegister">Crear cuenta</button>
+
   <p id="msg"></p>
 
   <script>
     const API = "http://localhost:3001";
-    const TARGET = "/frontend/vistas/index.html";  // <- destino despues de login
+    const TARGET = "/frontend/vistas/index.html";
 
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
+
       const res = await fetch(API + "/api/login", {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         credentials: "include",
         body: JSON.stringify({email, password})
       });
+
       const data = await res.json();
+
       if(data.ok){
         window.location.href = TARGET;
       } else {
@@ -43,13 +52,20 @@
     document.getElementById("forgotBtn").addEventListener("click", async ()=>{
       const email = document.getElementById("email").value.trim();
       if(!email){alert("Ingresa un email primero"); return;}
+
       const res = await fetch(API + "/api/forgot-password", {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({email})
       });
+
       await res.json();
       alert("Si existe una cuenta con ese email, se envio el link de recuperacion.");
+    });
+
+    // 🔵 Evento del nuevo botón
+    document.getElementById("goRegister").addEventListener("click", ()=>{
+      window.location.href = "../register/register.html";
     });
   </script>
 </body>
