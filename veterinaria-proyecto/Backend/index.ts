@@ -15,7 +15,7 @@ app.get("/", (_req, res) => {
 app.post("/auth/register", async (req, res) => {
   try {
     const result = await registerUser(req.body);
-    const status = result.ok ? 201 : 400;
+    const status = (result as any).ok ? 201 : 400;
     res.status(status).json(result);
   } catch (e) {
     res.status(500).json({ ok: false, message: "Error en el servidor" });
@@ -25,7 +25,7 @@ app.post("/auth/register", async (req, res) => {
 app.post("/auth/login", async (req, res) => {
   try {
     const result = await loginUser(req.body);
-    const status = result.ok ? 200 : 401;
+    const status = (result as any).ok ? 200 : 401;
     res.status(status).json(result);
   } catch (e) {
     res.status(500).json({ ok: false, message: "Error en el servidor" });
