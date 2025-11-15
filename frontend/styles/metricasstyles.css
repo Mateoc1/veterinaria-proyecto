@@ -1,0 +1,130 @@
+/* ===== PALETA GENERAL ===== */
+:root {
+  --fondo: #F4F6FF;        /* fondo azul muy clarito */
+  --texto: #1E1E1E;
+  --encabezado: #283593;   /* azul oscuro elegante */
+  --acento: #5865F2;       /* AZUL FACHERO (Discord-ish) */
+  --hover: #7F8BFF;        /* azul claro para hover */
+  --iconos: #E7E9FF;       /* azul pastel */
+  --elemento-neutro: #DCE1F7;
+}
+
+/* ===== Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--fondo);
+  font-family: Arial, sans-serif;
+  color: var(--texto);
+}
+
+/* ===== NAVBAR ===== */
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: var(--azul);
+  color: var(--blanco);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+header nav .logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: var(--blanco);
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+header nav ul li a:hover {
+  opacity: 0.8;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--azul-oscuro);
+  margin-bottom: 25px;
+}
+
+/* ===== TARJETAS DE MÉTRICAS ===== */
+.metrics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.metric-card {
+  background: var(--blanco);
+  padding: 20px;
+  width: calc(50% - 10px);
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
+.metric-title {
+  font-size: 16px;
+  color: var(--azul-oscuro);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--azul);
+}
+
+/* ===== GRÁFICO ===== */
+.chart-container {
+  background: var(--blanco);
+  margin-top: 35px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
+.chart-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--azul-oscuro);
+  margin-bottom: 15px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .metric-card {
+    width: 100%;
+  }
+
+  header nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  header nav ul {
+    gap: 10px;
+  }
+}

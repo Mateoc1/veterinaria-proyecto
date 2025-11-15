@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetCare - Historial Clínico</title>
+  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/styles.css">
+  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/historialStyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body class="doctor">
+  <header>
+    <nav>
+        <a href="../doc.html" class="logo-link">
+          <i class="fa-solid fa-paw"></i> VetCare
+        </a>
+      <ul>
+        <li><a href="../doc.html">Inicio</a></li>
+        <li><a href="#">Turnos</a></li>
+        <li><a href="../Verhistorial/Acthistorial.html">Historial Clínico</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h2 style="text-align:center; color: var(--encabezado); margin-top: 2rem;">
+      Actualizar historial clínico
+    </h2>
+    <div class="container">
+      <!-- Lista de animales -->
+      <div class="animal-list">
+        <div class="animal" onclick="mostrarHistorial('Luna')">
+          <img src="../images/perro1.jpg" alt="Luna">
+          <div>
+            <h4>Luna</h4>
+            <p>Perrita - Labrador</p>
+          </div>
+        </div>
+        <div class="animal" onclick="mostrarHistorial('Michi')">
+          <img src="../images/gato1.jpg" alt="Michi">
+          <div>
+            <h4>Michi</h4>
+            <p>Gato - Persa</p>
+          </div>
+        </div>
+        <div class="animal" onclick="mostrarHistorial('Roco')">
+          <img src="../images/perro2.jpg" alt="Roco">
+          <div>
+            <h4>Roco</h4>
+            <p>Perro - Beagle</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel de historial -->
+      <div class="historial" id="panel-historial">
+        <p>Seleccioná un animal para ver y editar su historial.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><i class="fa-solid fa-paw"></i> VetCare - Doctor</p>
+    <p class="copy">© 2025 VetCare - Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    const historiales = {
+      'Luna': {
+        foto: '../images/perro1.jpg',
+        texto: 'Control general. Vacunas al día. Se recomienda revisión dental el próximo mes.'
+      },
+      'Michi': {
+        foto: '../images/gato1.jpg',
+        texto: 'Gato tranquilo. Peso estable. Se aplicó antiparasitario interno y externo.'
+      },
+      'Roco': {
+        foto: '../images/perro2.jpg',
+        texto: 'Revisión post operatoria exitosa. Herida cicatrizando bien.'
+      }
+    };
+
+    function mostrarHistorial(nombre) {
+      const panel = document.getElementById('panel-historial');
+      const data = historiales[nombre];
+
+      panel.innerHTML = `
+        <h3>${nombre}</h3>
+        <img src="${data.foto}" alt="${nombre}">
+        <div class="editable" id="texto" contenteditable="true">${data.texto}</div>
+        <button class="save-btn" onclick="guardar('${nombre}')">Guardar cambios</button>
+      `;
+    }
+
+    function guardar(nombre) {
+      const nuevoTexto = document.getElementById('texto').innerText;
+      historiales[nombre].texto = nuevoTexto;
+      alert('Historial de ' + nombre + ' actualizado correctamente.');
+    }
+  </script>
+</body>
+</html>

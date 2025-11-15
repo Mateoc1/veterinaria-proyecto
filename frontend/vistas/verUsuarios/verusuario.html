@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetCare - Usuarios Registrados</title>
+  <link rel="stylesheet" href="../../styles/styles.css">
+  <link rel="stylesheet" href="../../styles/usuarios.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo" id="logo"><i class="fa-solid fa-stethoscope"></i> VetCare Doctor</div>
+      <ul>
+        <li><a href="#">Consultas</a></li>
+        <li><a href="#">Pacientes</a></li>
+        <li><a href="../Verhistorial/Acthistorial.html">Historial</a></li>
+        <li><a href="../doc.html">Inicio</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <h1>Usuarios Registrados</h1>
+
+  <main class="usuarios-container">
+
+    <!-- Ejemplo de usuario -->
+    <div class="usuario-card">
+      <h2>Juan Pérez</h2>
+      <p>Dueño de: Max (Perro)</p>
+
+    </div>
+
+    <div class="usuario-card">
+      <h2>María López</h2>
+      <p>Dueña de: Mishi (Gato)</p>
+
+    </div>
+    <div class="usuario-card">
+     <h2>Lucas Ramírez</h2>
+      <p>Dueño de: Nube (Conejo)</p>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p><i class="fa-solid fa-stethoscope"></i> VetCare - Doctor</p>
+    <p class="copy">© 2025 VetCare - Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // Logo redirige al index del doctor
+    document.getElementById('logo').addEventListener('click', () => {
+      window.location.href = ''; // poné acá el link al index del doctor
+    });
+  </script>
+</body>
+</html>

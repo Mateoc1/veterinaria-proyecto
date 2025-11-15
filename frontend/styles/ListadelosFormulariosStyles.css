@@ -1,0 +1,115 @@
+/* ===== LISTA DE SOLICITUDES ===== */
+
+/* Contenedor principal */
+.lista-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+/* Título */
+.lista-container h2 {
+  text-align: center;
+  color: var(--encabezado);
+  margin-bottom: 1.5rem;
+}
+
+/* Tabla */
+.tabla-solicitudes {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid var(--elemento-neutro);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.tabla-solicitudes thead {
+  background: var(--iconos);
+}
+
+.tabla-solicitudes th {
+  padding: 1rem;
+  text-align: left;
+  color: var(--encabezado);
+  font-weight: 600;
+}
+
+.tabla-solicitudes td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--elemento-neutro);
+  color: var(--texto);
+  font-size: 0.95rem;
+}
+
+.tabla-solicitudes tr:hover {
+  background: #f5f7f8;
+}
+
+/* ===== ESTADOS ===== */
+.estado {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.estado.pendiente {
+  background: #FFF4C4;
+  color: #A67C00;
+}
+
+.estado.aprobado {
+  background: #CFF8D6;
+  color: #1B7F3B;
+}
+
+.estado.rechazado {
+  background: #FFD4D4;
+  color: #B80000;
+}
+
+/* ===== BOTÓN "VER" ===== */
+.btn-ver {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--acento);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-ver:hover {
+  background: var(--hover);
+}
+
+/* ===== RESPONSIVE (TABLA A TARJETAS) ===== */
+@media (max-width: 768px) {
+  .tabla-solicitudes thead {
+    display: none;
+  }
+
+  .tabla-solicitudes tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--elemento-neutro);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  .tabla-solicitudes td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+
+  .tabla-solicitudes td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: var(--encabezado);
+  }
+}

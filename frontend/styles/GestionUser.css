@@ -1,0 +1,205 @@
+/* ===== PALETA GENERAL ===== */
+:root {
+  --fondo: #F4F6FF;        /* fondo azul muy clarito */
+  --texto: #1E1E1E;
+  --encabezado: #283593;   /* azul oscuro elegante */
+  --acento: #5865F2;       /* AZUL FACHERO (Discord-ish) */
+  --hover: #7F8BFF;        /* azul claro para hover */
+  --iconos: #E7E9FF;       /* azul pastel */
+  --elemento-neutro: #DCE1F7;
+}
+
+/* ===== RESETEO ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+/* ===== NAVBAR ===== */
+header {
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--encabezado);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo i {
+  color: var(--acento);
+}
+
+nav ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+nav a:hover {
+  color: var(--acento);
+}
+
+/* ===== TITULOS ===== */
+h1, h2 {
+  color: var(--encabezado);
+  margin-bottom: 1rem;
+}
+
+section {
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  padding: 0 2rem;
+}
+
+/* ===== TABLAS ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+th {
+  background: var(--acento);
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--elemento-neutro);
+}
+
+tr:hover {
+  background: #EEF0FF;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.badge-pendiente {
+  background: var(--iconos);
+  color: var(--encabezado);
+}
+
+.badge-activo {
+  background: #C8FFD0;
+  color: #1B5E20;
+}
+
+.badge-inactivo {
+  background: #FFE0E0;
+  color: #C62828;
+}
+
+/* ===== BOTONES ===== */
+.btn {
+  background: var(--acento);
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: var(--hover);
+}
+
+/* ===== TARJETAS ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid var(--elemento-neutro);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+}
+
+.card i {
+  font-size: 2.4rem;
+  color: var(--acento);
+  margin-bottom: 10px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(88,101,242,0.25);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  margin-top: 3rem;
+  background: var(--encabezado);
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-top: 5px solid var(--acento);
+}
+
+footer i {
+  color: var(--acento);
+}
+
+.copy {
+  opacity: 0.8;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+  }
+}
