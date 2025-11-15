@@ -1,0 +1,47 @@
+Dejo esto porque ya paso mucho que hay gente a la cual el servidor no le anda.
+
+- Usualmente, lo unico que tendrian que hacer es primero
+
+-- Escribir 'npm run build' en la terminal (ctrl+j). Al hacer eso, deberian de aparecer las carpetas "dist" en un color grisaceo.
+
+- IMPORTANTE A TENER EN CUENTA: Es muy necesario que a la hora de tener la carpeta dist, aparezca el archivo "index.js" en ella,
+ese archivo es la base del servidor mismo, y si no aparece (probablemente por un error en el package ─que no deberia haber─ y 
+para el cual se recomienda chequear si tu rama esta actualizada a los commits) el servidor no andara y lanzara probablemente un error
+MODULE_NOT_FOUND.
+
+- Una causa de errores en el servidor suele ser la desactualizacion de la rama, ya que durante el transcurso del proyecto se cambiaron
+de locacion muchos archivos, y si el package.json tiene rutas equivocadas, no va a generar el index.js y por consecuente el servidor. 
+Para asegurarse de que tu rama esta al dia, tienes que ir al Github en internet y abajo del titulo del repositorio, aparecen tres 
+estadisticas de la siguiente forma:
+
+        main | 16 branches | 0 tags
+
+Tienen que apretar donde dice main y cambiar a su rama de trabajo, si la rama esta al dia, no aparecera nada, de lo contrario, por arriba
+de las estadisticas que recien mostre va a decir algo como:
+
+        This branch is (NUMERO) commits behind main.
+
+Si saben algo de ingles, entienden de que va eso, pero si no, dice que tu rama (en la que estas) esta tantos commits (actualizaciones)
+detras del main que es el repositorio en tiempo y forma, eso significa que esta atrasado en el tiempo. Y ahi tienes dos opciones, 
+o mergear el main a tu rama (mas tedioso, pero sirve si tenes TOC) o borrar la rama y crear una nueva en base al main. Main que obviamente
+tambien tiene que estar actualizado (recomiendo hacer fetch & pull en el main cada vez que vas a trabajar con el codigo).
+
+-- Si todo esta bien y la terminal muestra:
+        
+> mitin@1.0.0 build
+> tsc
+
+(mas algunos error de dotenv y cosas a las que no tienen que darles bola, ustedes enfoquense en que diga lo de arriba y ya)
+
+    Entonces ya pueden proceder a ejecutar el servidor escribiendo 'npm start', y si al final de la consola dice:
+
+Servidor disponible en el puerto 3000 
+
+    Ya esta todo andando de 10, si tenes mas dudas, abri el navegador de turno que tengas y en la zona de enlaces escribi 
+    'localhost:3000' donde, si el servidor funciona, deberia aparecer una pagina en blanco con un texto que diga
+
+Servidor funcionando correctamente 🚀
+
+    Si aparece, felicitaciones, ya tenes el servidor a tu disposicion. Recomiendo que la consola donde se haga esto pertenezca a NODE 
+    (si no lo tenes, instalarlo) y es importante que nunca elimines ni cierres la consola, ya que eso significa tirar abajo el server
+    y vas a tener que hacer todo esto de vuelta. 
