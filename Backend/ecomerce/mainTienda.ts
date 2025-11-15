@@ -1,5 +1,6 @@
 import { Carrito } from "./carrito";
 import { Producto } from "./producto";
+import { intentarAplicarCupon, aplicarDescuento, getCuponActual } from "./cuponSistema.js";
 
 const carrito = new Carrito();
 
@@ -27,8 +28,12 @@ function renderCarrito() {
       .join("");
   }
 
-  totalHTML.textContent = carrito.obtenerTotal().toString();
+  // Total con descuento (si hay cupón)
+  const totalConDescuento = aplicarDescuento(carrito);
+
+  totalHTML.textContent = totalConDescuento.toString();
 }
+
 
 // -------------------------
 // Agregar productos
@@ -63,5 +68,19 @@ btnVaciar.addEventListener("click", () => {
 btnComprar.addEventListener("click", () => {
   alert("Compra procesada!");
   carrito.vaciarCarrito();
+  renderCarrito();
+});
+
+const btnAplicarCupon = document.getElementById("aplicar-cupon")!;
+const cuponInput = document.getElementById("cupon") as HTMLInputElement;
+const msgCupon = document.getElementById("msg-cupon")!;
+
+btnAplicarCupon.addEventListener("click", () => {
+  const code = cuponInput.value;
+  const mensaje = intentarAplicarCupon(code);
+
+  msgCupon.textContent = mensaje;
+
+  // Actualiza el total con el descuento aplicado
   renderCarrito();
 });

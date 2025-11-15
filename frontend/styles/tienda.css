@@ -142,3 +142,12 @@ section h2 {
 .producto button {
   margin-top: auto;
 }
+
+#cupon-area {
+  margin-bottom: 20px;
+
+}
+
+#msg-cupon {
+  margin-top: 15px;
+}
