@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetCare - Solicitud de Adopción</title>
+  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/adopcionStyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="usuario">
+
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-paw"></i> VetCare</div>
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="#">Adopciones</a></li>
+        <li><a href="#">Tienda</a></li>
+        <li><a href="#">Mis Mascotas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-adopcion">
+      <h2>Formulario de Adopción</h2>
+
+      <form action="procesar.php" method="POST" class="adopt-form">
+
+  <h3>Información del hogar</h3>
+
+  <label>Tipo de vivienda</label>
+  
+  <select name="tipo_vivienda" required>
+    <option value="">Seleccionar</option>
+    <option value="casa">Casa</option>
+    <option value="departamento">Departamento</option>
+    <option value="otro">Otro</option>
+  </select>
+
+  <label>¿Tenés un espacio seguro para la mascota?</label>
+  <select name="espacio_seguro" required>
+    <option value="">Seleccionar</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
+
+  <label>¿Cuántas horas al día la mascota estaría sola?</label>
+  <input type="number" name="tiempo_solo" min="0" max="24" required>
+
+  <label>¿Cuántas personas viven en tu casa?</label>
+  <input type="number" name="personas_encasa" min="1" required>
+
+  <label>¿Tu familia está de acuerdo con la adopción?</label>
+  <select name="familia_deacuerdo" required>
+    <option value="">Seleccionar</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
+
+  <h3>Experiencia previa</h3>
+
+  <label>¿Tuviste mascotas anteriormente?</label>
+  <select name="otras_mascotas_anteriormente" required>
+    <option value="">Seleccionar</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
+
+  <label>¿Cuántas mascotas tenés actualmente?</label>
+  <input type="number" name="otras_mascotas_actualmente" min="0" required>
+
+  <label>¿Qué tipo de mascotas tenés actualmente? (si no, poné "ninguna")</label>
+  <input type="text" name="tipo_mascotas_actual" maxlength="45" required>
+
+  <h3>Preferencias y compromisos</h3>
+
+  <label>Tipo de animal que querés adoptar</label>
+  <select name="tipo" required>
+    <option value="">Seleccionar</option>
+    <option value="perro">Perro</option>
+    <option value="gato">Gato</option>
+  </select>
+
+  <label>¿Aceptarías recibir mascotas por eventos especiales? (ej: tránsito temporal)</label>
+  <input type="text" name="eventos" maxlength="45" placeholder="Ej: Solo adopción, tránsito temporal..." required>
+
+  <label>¿Contás con recursos para su cuidado?</label>
+  <select name="recursos" required>
+    <option value="">Seleccionar</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
+
+  <label>¿Te comprometés a vacunar y esterilizar?</label>
+  <select name="vacunar_y_esterilizar" required>
+    <option value="">Seleccionar</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
+
+  <label>¿Quién será el encargado principal de su cuidado?</label>
+  <input type="text" name="encargado_cuidado" maxlength="20" required>
+
+  <label>¿Dónde estará el animal cuando esté solo?</label>
+  <input type="text" name="sitio_animal_solo" maxlength="25" required>
+
+  <label>Rol del animal en la familia</label>
+  <input type="text" name="rol_del_animal" maxlength="25" placeholder="Compañía, guardián, terapia..." required>
+
+  <input type="hidden" name="estado" value="pendiente">
+
+  <button type="submit" class="btn-adoptar">Enviar Solicitud</button>
+</form>
+    </section>
+  </main>
+
+</body>
+</html>

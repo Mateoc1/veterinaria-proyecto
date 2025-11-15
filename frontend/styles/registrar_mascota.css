@@ -1,0 +1,49 @@
+/* ===== FORMULARIO EN CARD ===== */
+.cards {
+  max-width: 700px;
+  margin: 3rem auto;
+  display: grid;
+  gap: 2rem;
+}
+
+.card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card h2 {
+  text-align: center;
+  color: var(--encabezado);
+  margin-bottom: 1.5rem;
+}
+
+.card form input,
+.card form select {
+  padding: 0.7rem;
+  border: 1px solid var(--elemento-neutro);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.card form button {
+  background: var(--acento);
+  color: white;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card form button:hover {
+  background: var(--hover);
+}
+
+/* Ajustes responsive para el formulario */
+@media (max-width: 768px) {
+  .cards {
+    padding: 0 1rem;
+  }
+}
