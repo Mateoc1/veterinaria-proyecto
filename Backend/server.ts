@@ -10,9 +10,9 @@ import {
   loginUser,
   createPasswordReset,
   resetPassword,
-  validateResetToken,
-  getDb
+  validateResetToken
 } from "./auth/auth";
+
 import { verifyMailer, sendTestEmail, sendPasswordResetEmail } from "./services/mailer";
 
 dotenv.config();
