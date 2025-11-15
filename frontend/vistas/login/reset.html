@@ -18,30 +18,6 @@
 
   <p id="msg"></p>
 
-  <script>
-    const API = "http://localhost:3001";
-    const LOGIN = "/frontend/vistas/login/login.html";
-    const token = new URLSearchParams(location.search).get("token");
-
-    document.getElementById("resetForm").addEventListener("submit", async (e)=>{
-      e.preventDefault();
-      const a = document.getElementById("password").value;
-      const b = document.getElementById("confirm").value;
-      const msg = document.getElementById("msg");
-      if(a!==b){msg.textContent="Las contrasenas no coinciden"; return;}
-      const res = await fetch(API + "/api/reset-password", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({token, password:a})
-      });
-      const data = await res.json();
-      if(data.ok){
-        msg.textContent="Contrasena actualizada";
-        setTimeout(()=>location.href=LOGIN,1000);
-      } else {
-        msg.textContent=data.error||"Error";
-      }
-    });
-  </script>
+  <script type="module" src="/frontend/pages/reset.js"></script>
 </body>
 </html>

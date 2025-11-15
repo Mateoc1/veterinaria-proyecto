@@ -1,55 +1,21 @@
+/**
+ * Autenticación usando Prisma con PostgreSQL
+ */
+
 import bcrypt from "bcrypt";
-import sqlite3 from "sqlite3";
-import { open, Database } from "sqlite";
 import crypto from "crypto";
-import dotenv from "dotenv";
-dotenv.config();
-
-// Extraer la ruta del archivo desde DATABASE_URL de Prisma
-// Formato: "file:./src/database/basededatos.sqlite"
-const getDatabasePath = (): string => {
-  const dbUrl = process.env.DATABASE_URL;
-  if (dbUrl && dbUrl.startsWith("file:")) {
-    return dbUrl.replace("file:", "");
-  }
-  return process.env.DATABASE_PATH || "./src/database/basededatos.sqlite";
-};
-
-const DB_PATH = getDatabasePath();
-
-let dbPromise: Promise<Database<sqlite3.Database, sqlite3.Statement>> | null = null;
-
-export function getDb() {
-  if (!dbPromise) {
-    dbPromise = open({
-      filename: DB_PATH,
-      driver: sqlite3.Database,
-    });
-  }
-  return dbPromise;
-}
+import { prisma } from "../lib/prisma";
 
 export async function initAuthSchema() {
-  const db = await getDb();
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      lastname TEXT,
-      email TEXT UNIQUE,
-      password_hash TEXT NOT NULL,
-      role TEXT DEFAULT 'user',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    CREATE TABLE IF NOT EXISTS password_resets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      token TEXT UNIQUE NOT NULL,
-      expires_at DATETIME NOT NULL,
-      used INTEGER DEFAULT 0,
-      FOREIGN KEY(user_id) REFERENCES users(id)
-    );
-  `);
+  // Prisma crea las tablas automáticamente con las migraciones
+  // Solo verificamos la conexión
+  try {
+    await prisma.$connect();
+    console.log("✅ Conectado a PostgreSQL con Prisma");
+  } catch (error) {
+    console.error("❌ Error conectando a PostgreSQL:", error);
+    throw error;
+  }
 }
 
 export async function registerUser(input: {
@@ -58,60 +24,118 @@ export async function registerUser(input: {
   email: string;
   password: string;
 }) {
-  const db = await getDb();
   const { name, lastname, email, password } = input;
-  const exists = await db.get(`SELECT id FROM users WHERE email = ?`, [email]);
+  
+  // Verificar si el usuario ya existe
+  const exists = await prisma.user.findUnique({
+    where: { email },
+  });
+  
   if (exists) {
     throw new Error("El email ya esta registrado");
   }
+  
   const hash = await bcrypt.hash(password, 10);
-  const result = await db.run(
-    `INSERT INTO users (name, lastname, email, password_hash) VALUES (?, ?, ?, ?)`,
-    [name ?? null, lastname ?? null, email, hash]
-  );
-  return { id: result.lastID, email };
+  
+  const user = await prisma.user.create({
+    data: {
+      name: name ?? null,
+      lastname: lastname ?? null,
+      email,
+      passwordHash: hash,
+    },
+    select: {
+      id: true,
+      email: true,
+    },
+  });
+  
+  return { id: user.id, email: user.email };
 }
 
 export async function loginUser(email: string, password: string) {
-  const db = await getDb();
-  const user = await db.get(`SELECT * FROM users WHERE email = ?`, [email]);
-  if (!user) throw new Error("Credenciales invalidas");
-  const ok = await bcrypt.compare(password, user.password_hash);
-  if (!ok) throw new Error("Credenciales invalidas");
-  return { id: user.id, email: user.email, role: user.role };
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  
+  if (!user) {
+    throw new Error("Credenciales invalidas");
+  }
+  
+  const ok = await bcrypt.compare(password, user.passwordHash);
+  if (!ok) {
+    throw new Error("Credenciales invalidas");
+  }
+  
+  return {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  };
 }
 
 export async function createPasswordReset(email: string) {
-  const db = await getDb();
-  const user = await db.get(`SELECT id FROM users WHERE email = ?`, [email]);
-  if (!user) return null;
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  
+  if (!user) {
+    return null;
+  }
+  
   const token = crypto.randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
-  await db.run(
-    `INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)`,
-    [user.id, token, expiresAt.toISOString()]
-  );
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+  
+  await prisma.passwordReset.create({
+    data: {
+      userId: user.id,
+      token,
+      expiresAt,
+    },
+  });
+  
   return { token, userId: user.id };
 }
 
 export async function validateResetToken(token: string) {
-  const db = await getDb();
-  const row = await db.get(
-    `SELECT * FROM password_resets WHERE token = ? AND used = 0`,
-    [token]
-  );
-  if (!row) return null;
-  const isExpired = new Date(row.expires_at).getTime() < Date.now();
-  if (isExpired) return null;
-  return row as { id: number; user_id: number; token: string };
+  const row = await prisma.passwordReset.findUnique({
+    where: { token },
+  });
+  
+  if (!row || row.used) {
+    return null;
+  }
+  
+  if (row.expiresAt < new Date()) {
+    return null;
+  }
+  
+  return {
+    id: row.id,
+    user_id: row.userId,
+    token: row.token,
+  };
 }
 
 export async function resetPassword(token: string, newPassword: string) {
-  const db = await getDb();
   const row = await validateResetToken(token);
-  if (!row) throw new Error("Token invalido o expirado");
+  
+  if (!row) {
+    throw new Error("Token invalido o expirado");
+  }
+  
   const hash = await bcrypt.hash(newPassword, 10);
-  await db.run(`UPDATE users SET password_hash = ? WHERE id = ?`, [hash, row.user_id]);
-  await db.run(`UPDATE password_resets SET used = 1 WHERE id = ?`, [row.id]);
+  
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: row.user_id },
+      data: { passwordHash: hash },
+    }),
+    prisma.passwordReset.update({
+      where: { id: row.id },
+      data: { used: true },
+    }),
+  ]);
+  
   return true;
 }
