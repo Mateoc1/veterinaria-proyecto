@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="./styles/login.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <h1>Iniciar sesión</h1>
+
+  <form id="loginForm" novalidate>
+    <label>Email:</label>
+    <input type="email" id="loginEmail" required>
+    <br>
+    <label>Contraseña:</label>
+    <input type="password" id="loginPass" required>
+    <br>
+    <p id="loginError" style="color:red;"></p>
+    <button type="submit">Ingresar</button>
+    <button type="button" id="recoverBtn">Recuperar contraseña</button>
+    <a href="../register/register.html">Crear cuenta</a>
+  </form>
+
+  <script src="./dist/login.js" type="module"></script>
+
+
+  
+
+
+
+
+</body>
+</html>
+
