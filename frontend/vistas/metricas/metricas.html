@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - VetCare Admin</title>
+
+  <!-- Tus estilos -->
   <link rel="stylesheet" href="/frontend/styles/metricasstyles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body class="admin">
 
 <header>
@@ -14,15 +19,15 @@
     <div class="logo"><i class="fa-solid fa-gear"></i> VetCare Admin</div>
     <ul>
       <li><a href="/frontend/vistas/admin.html">Admin</a></li>
-      <li><a href="/frontend/vistas/Formulario/listadelosformularios.html">Solicitudes</a></li>
-      <li><a href="/frontend/vistas/tienda/tienda.html">Productos</a></li>
-      <li><a href="/frontend/vistas/verUsuarios/GestionarUser.html">Gestionar</a></li>    
+      <li><a href="/frontend/vistas/Formulario/Listadelosfornularios.html">Solicitudes</a></li>
+      <li><a href="adopciones.html">Productos</a></li>
+      <li><a href="/frontend/vistas/verUsuarios/GestionarUser.html">Gestionar</a></li>
       <li><a href="/frontend/vistas/cupones/gestionCupones.html">Cupones</a></li>
     </ul>
   </nav>
 </header>
 
-<section>
+<section class="dashboard">
   <h2>Métricas Generales</h2>
 
   <div class="cards">
@@ -50,8 +55,21 @@
       <p class="metric-number">25</p>
     </div>
   </div>
-</section>
 
+  <!-- Placeholder de gráficos -->
+  <div class="charts">
+    <div class="chart-card">
+      <h3>Adopciones por Mes</h3>
+      <div class="chart-placeholder">📊</div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Usuarios Nuevos</h3>
+      <div class="chart-placeholder">📈</div>
+    </div>
+  </div>
+
+</section>
 
 </body>
 </html>
