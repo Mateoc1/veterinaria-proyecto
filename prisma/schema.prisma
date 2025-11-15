@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -26,7 +26,19 @@ model cliente {
 }
 
 model formulario {
-  idformulario               Int    @id @default(autoincrement())
+  idformulario               Int     @id @default(autoincrement())
+  nombre                     String?
+  apellido                   String?
+  telefono                   Int?
+  mail                       String?
+  fecha_nacimiento           String?
+  direccion                  String?
+  ciudad                     String?
+  provincia                  String?
+  codigo_postal              Int?
+  pais                       String?
+  tipo_documento             String?
+  numero_documento           Int?
   tipo_vivienda              String
   espacio_seguro             String
   tiempo_solo                Int
@@ -51,7 +63,7 @@ model productos {
   idproducto Int     @id @default(autoincrement())
   nombre     String?
   url_imagen String?
-  stock      Int?
+  stock      Int
 
   // relations
   compras    compra[]
@@ -104,6 +116,9 @@ model turno {
 model perfil {
   idperfil Int    @id @default(autoincrement())
   nombre   String?
+  apellido String?
+  telefono Int?
+  mail     String?
   mascota  Int?
 
   // relations
