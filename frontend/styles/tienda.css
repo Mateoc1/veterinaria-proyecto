@@ -1,0 +1,153 @@
+/* ===== RESETEO Y CONFIGURACIÓN GENERAL ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden; /* Evita el desplazamiento lateral */
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #F8FAF9;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: #FF9F43;
+  padding: 8px 0;
+  width: 100%;
+  margin-bottom: 80px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0.8rem 1rem;  /* Reducido para evitar overflow */
+}
+
+.logo {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.logo i {
+  color: #FF6F0F;
+  margin-right: 8px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  flex-wrap: wrap; /* Si no entra, baja */
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #FF6F0F;
+}
+
+/* ===== BOTONES ===== */
+button {
+  background: #FF9F43;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #FFC97E;
+}
+
+/* ===== MAIN ===== */
+main {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1; /* Empuja el footer al fondo */
+}
+
+/* ===== SECTION ===== */
+section {
+  width: 100%;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+section h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* ===== PRODUCTOS ===== */
+#lista-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.producto {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #eee;
+}
+
+.producto h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.producto p {
+  margin: 0;
+  color: #444;
+}
+
+.producto button {
+  margin-top: auto;
+}
+
+#cupon-area {
+  margin-bottom: 20px;
+
+}
+
+#msg-cupon {
+  margin-top: 15px;
+}
