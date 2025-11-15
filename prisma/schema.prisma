@@ -46,7 +46,6 @@ model formulario {
   familia_deacuerdo          String
   otras_mascotas_anteriormente String
   tipo                       String
-  eventos                    String
   otras_mascotas_actualmente Int
   tipo_mascotas_actual       String
   recursos                   String
