@@ -1,10 +1,22 @@
 CREATE TABLE cliente(
  idusuario INTEGER PRIMARY KEY NOT NULL,
-  mail VARCHAR(45) NOT NULL,
-  contraseña VARCHAR(20) NOT NULL
+ mail VARCHAR(45) NOT NULL,
+ contraseña VARCHAR(20) NOT NULL
 );
 CREATE TABLE formulario(
   idformulario INTEGER PRIMARY KEY NOT NULL,
+  nombre TEXT,
+  apellido TEXT,
+  telefono INTEGER,
+  mail TEXT,
+  fecha_nacimiento TEXT,
+  direccion TEXT,
+  ciudad TEXT,
+  provincia TEXT,
+  codigo_postal INTEGER,
+  pais TEXT,
+  tipo_documento TEXT,
+  numero_documento INTEGER,
   tipo_vivienda VARCHAR(10) NOT NULL,
   espacio_seguro VARCHAR(2) NOT NULL,
   tiempo_solo INTEGER NOT NULL,
@@ -55,6 +67,9 @@ FOREIGN KEY (mascota) REFERENCES animal(idanimal)
 CREATE TABLE perfil(
 idperfil INTEGER PRIMARY KEY NOT NULL,
 nombre TEXT,
+apellido TEXT,
+telefono INTEGER,
+mail TEXT,
 mascota INTEGER,
 FOREIGN KEY (mascota) REFERENCES animal(idanimal)
 );
