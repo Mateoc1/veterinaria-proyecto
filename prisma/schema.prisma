@@ -1,136 +1,64 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// ============ AUTHENTICATION ============
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  role         String    @default("user")
-  createdAt    DateTime  @default(now()) @map("created_at")
+model users {
+  idusuario   Int      @id @default(autoincrement())
+  name        String?
+  lastname    String?
+  email       String   @unique
+  password_hash String
+  role        String   @default("user")
+  created_at  DateTime @default(now())
 
-  passwordResets PasswordReset[]
-  appointments   Appointment[]
+  // relations
+  animales    animal[] @relation("UserAnimales")
+  password_resets password_resets[]
 
   @@map("users")
 }
 
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_resets")
-}
-
-// ============ PETS / ADOPTIONS ============
-model Pet {
-  id         String       @id
-  nombre     String
-  especie    String
-  foto       String?
-  adoptable  Boolean      @default(false)
-  createdAt  DateTime     @default(now()) @map("created_at")
-
-  appointments Appointment[]
-
-  @@map("pets")
-}
-
-// ============ APPOINTMENTS ============
-model Appointment {
-  id        String   @id
-  userId    Int?     @map("user_id")
-  petId     String   @map("pet_id")
-  motivo    String
-  fecha     DateTime @default(now())
-  estado    String   @default("pendiente")
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  pet  Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
-
-  @@map("appointments")
-}
-
-// ============ COUPONS ============
-model Coupon {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("coupons")
-}
-
-// ============ PRODUCTS ============
-model Product {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  precio    Float
-  stock     Int      @default(0)
-  urlImagen String?  @map("url_imagen")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("products")
-}
-
-// ============ LEGACY MODELS (mantener compatibilidad) ============
-model cliente {
-  idusuario   Int      @id @default(autoincrement())
-  mail        String
-  contrasena  String   @map("contraseña")
-
-  // relations
-  animales    animal[] @relation("ClienteAnimales")
-
-  @@map("cliente")
-}
-
 model formulario {
-  idformulario               Int     @id @default(autoincrement())
-  nombre                     String?
-  apellido                   String?
-  telefono                   Int?
-  mail                       String?
-  fecha_nacimiento           String?
-  direccion                  String?
-  ciudad                     String?
-  provincia                  String?
-  codigo_postal              Int?
-  pais                       String?
-  tipo_documento             String?
-  numero_documento           Int?
-  tipo_vivienda              String
-  espacio_seguro             String
-  tiempo_solo                Int
-  personas_encasa            Int
-  familia_deacuerdo          String
-  otras_mascotas_anteriormente String
-  tipo                       String
-  otras_mascotas_actualmente Int
-  tipo_mascotas_actual       String
-  recursos                   String
-  vacunar_y_esterilizar      String
-  encargado_cuidado          String
-  sitio_animal_solo          String
-  rol_del_animal             String
-  estado                     String
+  idformulario                    Int     @id @default(autoincrement())
+  nombre                          String?
+  apellido                        String?
+  telefono                        Int?
+  mail                            String?
+  fecha_nacimiento                String?
+  direccion                       String?
+  ciudad                          String?
+  provincia                       String?
+  codigo_postal                   Int?
+  pais                            String?
+  tipo_documento                  String?
+  numero_documento                Int?
+  tipo_vivienda                   String
+  espacio_seguro                  String
+  tiempo_solo                     Int
+  personas_encasa                 Int
+  familia_deacuerdo               String
+  otras_mascotas_anteriormente    String
+  tipo                            String
+  eventos                         String
+  otras_mascotas_actualmente      Int
+  tipo_mascotas_actual            String
+  recursos                        String
+  vacunar_y_esterilizar           String
+  encargado_cuidado               String
+  sitio_animal_solo               String
+  rol_del_animal                  String
+  estado                          String
 
   @@map("formulario")
 }
@@ -168,7 +96,7 @@ model animal {
   dueno      Int?     @map("dueño")
 
   // relations
-  duenoRef cliente? @relation("ClienteAnimales", fields: [dueno], references: [idusuario])
+  duenoRef users? @relation("UserAnimales", fields: [dueno], references: [idusuario])
   turnos    turno[]
   perfiles  perfil[]
   historiales historial_medico[]
@@ -227,27 +155,14 @@ model historial_medico {
   @@map("historial_medico")
 }
 
-model User {
-  id           Int             @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String          @unique
-  passwordHash String          @map("password_hash")
-  role         String          @default("user")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  resets       PasswordReset[]
+model password_resets {
+  id                Int      @id @default(autoincrement())
+  user_id           Int
+  reset_token       String?
+  expiration_date   DateTime?
 
-  @@map("users")
-}
-
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-
-  user      User     @relation(fields: [userId], references: [id])
+  // relations
+  user              users    @relation(fields: [user_id], references: [idusuario])
 
   @@map("password_resets")
 }
