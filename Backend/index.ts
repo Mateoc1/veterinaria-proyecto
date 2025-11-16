@@ -1,8 +1,10 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { registerUser, loginUser, initAuthSchema } from "./auth/auth";
-import prisma from "./lib/prisma";
+import path from "path";
+import { registerUser, loginUser, initAuthSchema } from "./auth/auth.js";
+const pagoRouter = require("./ecomerce/pago.js");
+import prisma from "./lib/prisma.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -64,6 +66,14 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
+// Rutas de pago
+app.use("/api/pago", pagoRouter);
+
+// Servir archivos estáticos
+const FRONT_DIR = path.resolve(__dirname, "../frontend");
+app.use("/frontend", express.static(FRONT_DIR));
+
 app.listen(PORT, () => {
   console.log(`Servidor disponible en el puerto ${PORT}`);
+  console.log(`Accede a: http://localhost:${PORT}/frontend/vistas/index.html`);
 });

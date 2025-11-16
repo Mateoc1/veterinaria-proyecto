@@ -14,6 +14,7 @@ import {
 } from "./auth/auth";
 
 import { verifyMailer, sendTestEmail, sendPasswordResetEmail } from "./services/mailer";
+import pagoRouter from "./ecomerce/pago";
 
 dotenv.config();
 const app = express();
@@ -135,6 +136,8 @@ app.post("/api/reset-password", async (req, res) => {
     return res.status(400).json({ error: e.message || "no se pudo actualizar la contrasena" });
   }
 });
+
+app.use("/api/pago", pagoRouter);
 
 app.get("/frontend/vistas/register/index.html", (_req, res) => {
   res.redirect(301, "/frontend/vistas/register/register.html");

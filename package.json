@@ -32,6 +32,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
+    "mercadopago": "^2.10.0",
     "nodemailer": "^7.0.10",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"

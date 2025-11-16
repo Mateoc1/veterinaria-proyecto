@@ -1,8 +1,9 @@
 import { Carrito } from "./carrito";
 import { Producto } from "./producto";
-import { intentarAplicarCupon, aplicarDescuento, getCuponActual } from "./cuponSistema.js";
+import { CuponSistema } from "./cuponSistema";
 
 const carrito = new Carrito();
+const cuponSistema = new CuponSistema();
 
 // Obtiene elementos del DOM
 const listaProductosHTML = document.querySelectorAll(".producto");
@@ -11,9 +12,7 @@ const totalHTML = document.getElementById("total")!;
 const btnVaciar = document.getElementById("vaciar")!;
 const btnComprar = document.getElementById("comprar")!;
 
-// -------------------------
 // Función para renderizar carrito
-// -------------------------
 function renderCarrito() {
   const items = carrito.listarProductos();
 
@@ -29,15 +28,11 @@ function renderCarrito() {
   }
 
   // Total con descuento (si hay cupón)
-  const totalConDescuento = aplicarDescuento(carrito);
-
+  const totalConDescuento = cuponSistema.aplicarDescuento(carrito);
   totalHTML.textContent = totalConDescuento.toString();
 }
 
-
-// -------------------------
 // Agregar productos
-// -------------------------
 listaProductosHTML.forEach((div) => {
   const id = Number(div.getAttribute("data-id"));
   const name = div.querySelector("h3")!.textContent!;
@@ -54,21 +49,43 @@ listaProductosHTML.forEach((div) => {
   });
 });
 
-// -------------------------
 // Vaciar carrito
-// -------------------------
 btnVaciar.addEventListener("click", () => {
   carrito.vaciarCarrito();
+  cuponSistema.removerCupon();
   renderCarrito();
 });
 
-// -------------------------
-// Comprar
-// -------------------------
-btnComprar.addEventListener("click", () => {
-  alert("Compra procesada!");
-  carrito.vaciarCarrito();
-  renderCarrito();
+// Comprar con MercadoPago
+btnComprar.addEventListener("click", async () => {
+  const productos = carrito.listarProductos();
+  if (productos.length === 0) {
+    alert("El carrito está vacío");
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/pago/crear-preferencia', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        productos,
+        total: cuponSistema.aplicarDescuento(carrito)
+      })
+    });
+
+    const data = await response.json();
+    if (data.init_point) {
+      window.location.href = data.init_point;
+    } else {
+      alert('Error al procesar el pago');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error al conectar con el servidor');
+  }
 });
 
 const btnAplicarCupon = document.getElementById("aplicar-cupon")!;
@@ -77,10 +94,14 @@ const msgCupon = document.getElementById("msg-cupon")!;
 
 btnAplicarCupon.addEventListener("click", () => {
   const code = cuponInput.value;
-  const mensaje = intentarAplicarCupon(code);
+  const resultado = cuponSistema.intentarAplicarCupon(code);
 
-  msgCupon.textContent = mensaje;
+  msgCupon.textContent = resultado.mensaje;
+  msgCupon.style.color = resultado.valido ? 'green' : 'red';
 
   // Actualiza el total con el descuento aplicado
   renderCarrito();
 });
+
+// Inicializar
+renderCarrito();
