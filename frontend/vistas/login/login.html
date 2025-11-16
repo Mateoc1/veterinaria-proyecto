@@ -1,40 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <link rel="stylesheet" href="/frontend/styles/loginStyles.css">
+  <link rel="stylesheet" href="../../styles/loginStyles.css">
 </head>
-
 <body>
-  <header>
-    <nav>
-      <div class="logo"><i class="fa-solid fa-paw"></i> VetCare</div>
-      <ul>
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="#">Adopciones</a></li>
-        <li><a href="#">Tienda</a></li>
-        <li><a href="#">Mis Mascotas</a></li>
-      </ul>
-    </nav>
-  </header>
-
 
   <h2>Login</h2>
 
-  <form id="loginForm">
-    <label>Email:</label>
-    <input type="email" id="loginEmail" required><br>
-    <label>Contrasena:</label>
-    <input type="password" id="loginPass" required><br>
-    <button type="submit">Ingresar</button>
-  </form>
+  <div class="login-container">
+    <form id="loginForm">
 
-  <button id="recoverBtn">Recuperar contrasena</button>
-  <p id="loginError"></p>
+      <label>Email:</label>
+      <input type="email" id="email" required><br>
 
-  <script type="module" src="/frontend/pages/login.js"></script>
+      <label>Contrasena:</label>
+      <input type="password" id="password" required><br>
+
+      <button type="submit" class="login-btn">Ingresar</button>
+    </form>
+
+    <button id="forgotBtn" class="forgot-btn">Recuperar contraseña</button>
+
+    <!-- 🔵 BOTÓN NUEVO -->
+    <button id="goRegister" class="register-btn">Crear cuenta</button>
+
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    const API = "http://localhost:3001";
+    const TARGET = "/frontend/vistas/index.html";
+
+    // LOGIN
+    document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const res = await fetch(API + "/api/login", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        credentials: "include",
+        body: JSON.stringify({email, password})
+      });
+      const data = await res.json();
+
+      if(data.ok){
+        window.location.href = TARGET;
+      } else {
+        document.getElementById("msg").textContent = data.error || "Credenciales invalidas";
+      }
+    });
+
+    // RECUPERAR CONTRASEÑA
+    document.getElementById("forgotBtn").addEventListener("click", async ()=>{
+      const email = document.getElementById("email").value.trim();
+      if(!email){alert("Ingresa un email primero"); return;}
+
+      const res = await fetch(API + "/api/forgot-password", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({email})
+      });
+
+      await res.json();
+      alert("Si existe una cuenta con ese email, se envio el link de recuperacion.");
+    });
+
+    // 🔵 IR A REGISTRO
+    document.getElementById("goRegister").addEventListener("click", ()=>{
+      window.location.href = "../register/register.html";
+    });
+  </script>
+
 </body>
-
 </html>

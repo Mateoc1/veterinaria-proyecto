@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitudes de Adopción</title>
+
+  <link rel="stylesheet" href="/frontend/styles/styles.css">
+
+  <link rel="stylesheet" href="/frontend/styles/adopcionesList.css">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="admin">
+
+
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-gear"></i> VetCare Admin</div>
+      <ul>
+      <li><a href="/frontend/vistas/admin.html">Admin</a></li>
+      <li><a href="/frontend/vistas/verUsuarios/GestionarUser.html">Usuarios</a></li>
+      <li><a href="adopciones.html">Productos</a></li>
+      <li><a href="/frontend/vistas/Metricas/metricas.html">Fichas</a></li>    
+      <li><a href="/frontend/vistas/cupones/gestionCupones.html">Cupones</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section class="lista-container">
+    <h2>Solicitudes de Adopción</h2>
+    <p class="subtexto">Revisa y gestiona las solicitudes enviadas por los clientes.</p>
+
+    <table class="tabla-solicitudes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Mascota</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td data-label="ID">1</td>
+          <td data-label="Cliente">Juan Pérez</td>
+          <td data-label="Mascota">Rocky</td>
+          <td data-label="Fecha">2025-11-10</td>
+          <td data-label="Estado"><span class="estado pendiente">Pendiente</span></td>
+          <td data-label="Acciones">
+            <a class="btn-ver" href="adicion-detalle.html?id=1">Ver</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td data-label="ID">2</td>
+          <td data-label="Cliente">María López</td>
+          <td data-label="Mascota">Michi</td>
+          <td data-label="Fecha">2025-11-11</td>
+          <td data-label="Estado"><span class="estado pendiente">Pendiente</span></td>
+          <td data-label="Acciones">
+            <a class="btn-ver" href="adicion-detalle.html?id=2">Ver</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </section>
+
+</body>
+</html>

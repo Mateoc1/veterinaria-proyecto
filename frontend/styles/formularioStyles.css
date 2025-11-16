@@ -1,0 +1,220 @@
+/* ===== PALETA ===== */
+:root {
+  --fondo: #ffffff;
+  --texto: #2b2b2b;
+  --naranja: #ff8a00;
+  --gris-suave: #f4f4f4;
+  --borde: #dcdcdc;
+}
+
+/* ===== RESET SUAVE ===== */
+body, h1, h2, h3, p, ul, li, input, select, textarea, button {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+/* ===== GENERAL ===== */
+body.usuario {
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+/* ===== NAV ===== */
+header {
+  background: var(--fondo);
+  border-bottom: 2px solid var(--naranja);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+}
+
+nav .logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--naranja);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav ul li a:hover {
+  color: var(--naranja);
+}
+
+/* ===== BOTÓN DE MENÚ (HAMBURGUESA) ===== */
+.menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--texto);
+}
+
+/* ===== FORMULARIO ===== */
+.form-adopcion {
+  max-width: 800px;
+  margin: 40px auto;
+  background: var(--gris-suave);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--borde);
+}
+
+.form-adopcion h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--naranja);
+  font-size: 1.8rem;
+}
+
+.adopt-form h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: var(--naranja);
+  font-size: 1.2rem;
+}
+
+.adopt-form label {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.adopt-form input,
+.adopt-form select,
+.adopt-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
+.adopt-form textarea {
+  resize: vertical;
+}
+
+/* ===== CHECKBOX ESTILO ===== */
+.adopt-form label input[type="checkbox"] {
+  width: auto;
+  margin-right: 5px;
+}
+
+/* ===== BOTÓN ===== */
+.btn-adoptar {
+  background: var(--naranja);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.btn-adoptar:hover {
+  background: #e67c00;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* TABLET */
+@media (max-width: 1024px) {
+  nav {
+    padding: 15px 30px;
+  }
+
+  .form-adopcion {
+    width: 90%;
+  }
+}
+
+/* CELULAR */
+@media (max-width: 768px) {
+  nav {
+    padding: 15px 20px;
+    flex-wrap: wrap;
+  }
+
+  nav ul {
+    flex-direction: column;
+    background: var(--fondo);
+    position: absolute;
+    top: 65px;
+    right: 0;
+    width: 200px;
+    border-left: 2px solid var(--naranja);
+    border-bottom: 2px solid var(--naranja);
+    padding: 15px 0;
+    display: none;
+    text-align: center;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .form-adopcion {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .form-adopcion h2 {
+    font-size: 1.5rem;
+  }
+
+  .adopt-form h3 {
+    font-size: 1.1rem;
+  }
+
+  .btn-adoptar {
+    font-size: 0.95rem;
+  }
+}
+
+/* EXTRA PEQUEÑO (menos de 480px) */
+@media (max-width: 480px) {
+  nav {
+    padding: 10px 15px;
+  }
+
+  .logo {
+    font-size: 1.3rem;
+  }
+
+  nav ul {
+    width: 100%;
+  }
+
+  .form-adopcion {
+    padding: 15px;
+  }
+
+  .btn-adoptar {
+    padding: 10px;
+  }
+}

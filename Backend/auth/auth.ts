@@ -18,6 +18,8 @@ export async function initAuthSchema() {
   }
 }
 
+// ---------- REGISTRO ----------
+
 export async function registerUser(input: {
   name?: string;
   lastname?: string;
@@ -53,6 +55,8 @@ export async function registerUser(input: {
   return { id: user.id, email: user.email };
 }
 
+// ---------- LOGIN ----------
+
 export async function loginUser(email: string, password: string) {
   const user = await prisma.user.findUnique({
     where: { email },
@@ -73,6 +77,8 @@ export async function loginUser(email: string, password: string) {
     role: user.role,
   };
 }
+
+// ---------- CREAR TOKEN DE RESET ----------
 
 export async function createPasswordReset(email: string) {
   const user = await prisma.user.findUnique({
@@ -97,6 +103,8 @@ export async function createPasswordReset(email: string) {
   return { token, userId: user.id };
 }
 
+// ---------- VALIDAR TOKEN ----------
+
 export async function validateResetToken(token: string) {
   const row = await prisma.passwordReset.findUnique({
     where: { token },
@@ -117,25 +125,30 @@ export async function validateResetToken(token: string) {
   };
 }
 
+// ---------- RESET PASSWORD ----------
+
 export async function resetPassword(token: string, newPassword: string) {
-  const row = await validateResetToken(token);
-  
-  if (!row) {
+  const row = await prisma.passwordReset.findUnique({
+    where: { token },
+  });
+
+  if (!row || row.used || row.expiresAt.getTime() < Date.now()) {
     throw new Error("Token invalido o expirado");
   }
-  
+
   const hash = await bcrypt.hash(newPassword, 10);
-  
-  await prisma.$transaction([
-    prisma.user.update({
-      where: { id: row.user_id },
-      data: { passwordHash: hash },
-    }),
-    prisma.passwordReset.update({
-      where: { id: row.id },
-      data: { used: true },
-    }),
-  ]);
-  
+
+  // actualizar contraseña del usuario
+  await prisma.user.update({
+    where: { id: row.userId },
+    data: { passwordHash: hash },
+  });
+
+  // marcar el token como usado
+  await prisma.passwordReset.update({
+    where: { id: row.id },
+    data: { used: true },
+  });
+
   return true;
 }

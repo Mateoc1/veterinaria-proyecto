@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetCare - Registrar Mascota</title>
+  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/">
+  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/registrar_mascota.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="usuario">
+  <!-- Header / Navbar -->
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-paw"></i> VetCare</div>
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="#">Adopciones</a></li>
+        <li><a href="#">Tienda</a></li>
+        <li><a href="../vistas/IngresarMascota/mascota.html">Mis mascotas</a></li>
+      </ul>
+      <i class="fa-solid fa-bars menu-toggle"></i>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Registrar tu Mascota 🐾</h1>
+    <p>Completa los datos de tu mascota para gestionar su información y mantener todo en orden.</p>
+  </section>
+
+  <!-- Formulario en Card -->
+  <section class="cards">
+    <div class="card">
+      <h2>Formulario de Registro</h2>
+      <form action="registrarMascota.php" method="POST">
+        <label>Nombre de la mascota</label>
+        <input type="text" name="nombre" required>
+
+        <label>Tipo</label>
+        <select name="tipo" required>
+          <option value="">Seleccionar</option>
+          <option value="Perro">Perro</option>
+          <option value="Gato">Gato</option>
+          <option value="Ave">Ave</option>
+          <option value="Conejo">Conejo</option>
+          <option value="Otro">Otro</option>
+        </select>
+
+        <label>Raza</label>
+        <input type="text" name="raza">
+
+        <label>Edad</label>
+        <input type="number" name="edad" min="0">
+
+        <label>Nombre del dueño</label>
+        <input type="text" name="duenio" required>
+
+        <button type="submit" class="btn"><i class="fa-solid fa-dog"></i> Registrar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p><i class="fa-solid fa-paw"></i> VetCare - Usuario</p>
+    <p class="copy">© 2025 VetCare - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Script menú responsive -->
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navUl = document.querySelector('nav ul');
+
+    menuToggle.addEventListener('click', () => {
+      navUl.classList.toggle('show');
+    });
+  </script>
+</body>

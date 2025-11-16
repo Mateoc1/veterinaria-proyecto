@@ -14,8 +14,9 @@ import {
   loginUser,
   createPasswordReset,
   resetPassword,
-  validateResetToken,
+  validateResetToken
 } from "./auth/auth";
+
 import { verifyMailer, sendTestEmail, sendPasswordResetEmail } from "./services/mailer";
 
 // Importar rutas

@@ -1,0 +1,83 @@
+    .container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .animal-list {
+      background: white;
+      border: 1px solid var(--elemento-neutro);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .animal {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .animal:hover {
+      background: var(--iconos);
+    }
+
+    .animal img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .historial {
+      background: white;
+      border: 1px solid var(--elemento-neutro);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .historial img {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+
+    .editable {
+      width: 100%;
+      height: 200px;
+      border: 1px solid var(--elemento-neutro);
+      border-radius: 8px;
+      padding: 1rem;
+      outline: none;
+      resize: vertical;
+    }
+
+    .editable[contenteditable="true"]:focus {
+      border-color: var(--acento);
+      box-shadow: 0 0 5px var(--hover);
+    }
+
+    .save-btn {
+      margin-top: 1rem;
+      background: var(--acento);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .save-btn:hover {
+      background: var(--hover);
+    }
