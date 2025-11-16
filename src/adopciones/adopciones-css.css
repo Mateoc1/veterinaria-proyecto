@@ -1,44 +1,167 @@
-:root{
-	--bg:#F8FAF9;
-	--card:#ffffff;
-	--accent:#2b8aef;
-	--muted:#6b6b6b;
-	--radius:10px;
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #F8FAF9;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-*{box-sizing:border-box}
-body{
-	margin:0;
-	font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-	background:var(--bg);
-	color:#2E2E2E;
-}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-.site-header{background:linear-gradient(90deg,var(--accent),#4aa3ff);color:#fff;padding:32px 0}
-.site-header .lead{opacity:.95;margin:6px 0 0}
-
-.controls{display:flex;gap:12px;align-items:center;margin:20px 0}
-.controls input[type="search"], .controls select{
-	padding:10px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;flex:1;min-width:0
+header {
+  background: #FF9F43;
+  padding: 8px 0;
+  width: 100%;
+  margin-bottom: 80px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin:18px 0}
-.dog-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(23,23,23,0.08);display:flex;flex-direction:column}
-.dog-card img{width:100%;height:180px;object-fit:cover;display:block}
-.card-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.dog-name{margin:0;font-size:1.15rem}
-.meta{margin:0;color:var(--muted);font-size:0.9rem}
-.desc{margin:6px 0 0;color:#333;font-size:0.95rem}
-.card-actions{margin-top:auto;display:flex;gap:8px}
-.btn{appearance:none;border:0;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
-.btn.adopt{background:var(--accent);color:#fff}
-.btn.details{background:#f1f3f5;color:#111;border:1px solid #e6e6e6}
+nav {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
 
-.site-footer{padding:20px 0;text-align:center;color:var(--muted);font-size:0.95rem}
+.logo {
+  font-size: 1.5rem;
+  color: var(--encabezado);
+  font-weight: bold;
+}
 
-.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+.logo i {
+  color: var(--acento);
+  margin-right: 8px;
+}
 
-@media (max-width:520px){
-	.controls{flex-direction:column;align-items:stretch}
-	.dog-card img{height:150px}
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--acento);
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ----- CONTROLS ----- */
+.controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.controls input,
+.controls select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Accesibilidad: ocultar label pero dejarlo disponible */
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+}
+
+/* ----- GRID DE PERROS ----- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 25px;
+}
+
+/* ----- CARD ----- */
+.dog-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.dog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.dog-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 15px 18px;
+}
+
+.dog-name {
+  margin-bottom: 5px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.meta {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.desc {
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 15px;
+}
+
+/* ----- BOTONES ----- */
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.btn.adopt {
+  background: #ff7a59;
+  color: #fff;
+}
+
+.btn.adopt:hover {
+  background: #ff633c;
+}
+
+.btn.details {
+  background: #eee;
+  color: #333;
+}
+
+.btn.details:hover {
+  background: #ddd;
 }
