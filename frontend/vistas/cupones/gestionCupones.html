@@ -3,8 +3,23 @@
 <head>
   <title>Administrar Cupones</title>
   <link rel="stylesheet" href="/frontend/styles/cuponesStyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-gear"></i> VetCare Admin</div>
+      <ul>
+      <li><a href="/frontend/vistas/admin.html">Admin</a></li>
+      <li><a href="/frontend/vistas/verUsuarios/GestionarUser.html">Usuarios</a></li>
+      <li><a href="/frontend/vistas/formulario/listadelosformularios.html">Solicitudes</a></li>
+      <li><a href="/frontend/vistas/Metricas/metricas.html">Metricas</a></li>    
+      <li><a href="/frontend/vistas/cupones/gestionCupones.html">Cupones</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
   <h1>Administrar Cupones</h1>
 
   <form id="agregarCuponForm">
@@ -17,8 +32,10 @@
   <h3>Cupones actuales:</h3>
   <ul id="listaCupones"></ul>
 
+
   <p><a href="pago.html">Volver a la calculadora</a></p>
 
   <script type="module" src="/frontend/pages/cupones.js"></script>
+
 </body>
 </html>

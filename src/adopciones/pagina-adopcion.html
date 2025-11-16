@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adopciones</title>
+    <link rel="stylesheet" href="/frontend/styles/styles.css">
     <link rel="stylesheet" href="adopciones-css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <h1>Perros en adopción</h1>
-            <p class="lead">Encuentra a tu nuevo mejor amigo — perros rescatados listos para un hogar.</p>
-        </div>
-    </header>
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-paw"></i> VetCarruseles</div>
+      <ul>
+        <li><a href="/frontend/vistas/index.html">Inicio</a></li>
+        <li><a href="/frontend/vistas/tienda/tienda.html">Tienda</a></li>
+        <li><a href="/frontend/vistas/agregarMascota/mascota.html">Mis Mascotas</a></li>
+      </ul>
+    </nav>
+  </header>
 
     <main class="container">
         <section class="controls">
@@ -29,7 +35,7 @@
         <section class="grid" id="dogs">
             <!-- Sample dog card -->
             <article class="dog-card">
-                <img src="https://place-puppy.com/400x300"/>
+                <img src="/src/img/mestizo.png"/>
                 <div class="card-body">
                     <h2 class="dog-name">Bruno</h2>
                     <p class="meta">3 años • Mestizo • Madrid</p>
@@ -42,7 +48,7 @@
             </article>
 
             <article class="dog-card">
-                <img src="https://place-puppy.com/401x300" alt="Luna, perra tranquila" />
+                <img src="/src/img/labrador.png" alt="Luna, perra tranquila" />
                 <div class="card-body">
                     <h2 class="dog-name">Luna</h2>
                     <p class="meta">1 año • Labrador • Barcelona</p>
@@ -55,7 +61,7 @@
             </article>
 
             <article class="dog-card">
-                <img src="https://place-puppy.com/402x300" alt="Kira, perra enérgica" />
+                <img src="/src/img/podenco.png" alt="Kira, perra enérgica" />
                 <div class="card-body">
                     <h2 class="dog-name">Kira</h2>
                     <p class="meta">5 meses • Podenco • Sevilla</p>

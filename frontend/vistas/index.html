@@ -1,47 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VetCare - Usuario</title>
+  <title>VetCarruseles - Usuario</title>
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body class="usuario">
   <header>
     <nav>
 
-      <div class="logo"><i class="fa-solid fa-paw"></i> VetCarruseles</div>
+      <div class="logo">
+        <img src="/src/img/vete.jpg" alt="Logo Veterinaria Los Carruseles" class="logo-img">
+        VetCarruseles
+      </div>
+
       <ul>
         <li><a href="#">Inicio</a></li>
-        <li><a href="#">Adopciones</a></li>
-        <li><a href="#">Tienda</a></li>
-        <li><a href="#">Mis Mascotas</a></li>
+        <li><a href="/src/adopciones/pagina-adopcion.html">Adopciones</a></li>
+        <li><a href="/frontend/vistas/tienda/tienda.html">Tienda</a></li>
+        <li><a href="/frontend/vistas/agregarMascota/mascota.html">Mis Mascotas</a></li>
       </ul>
-      <div class="logo"><i class="fa-solid fa-paw"></i> VetCare</div>
     </nav>
   </header>
 
   <section class="hero">
     <h1>Bienvenido a Veterinaria Los carruseles 🐾</h1>
     <p>Adopta, compra productos y cuieda la salud de tus mascotas <br>¡Todo desde un solo lugar!</p>
-    <button class="btn">Ver animales disponibles</button>
   </section>
 
   <section>
     <h2>Acciones disponibles</h2>
     <div class="cards">
       <a href="/src/adopciones/pagina-adopcion.html">
-      <div class="card"><i class="fa-solid fa-dog"></i><h3>Ver animales en adopción</h3></div>
+        <div class="card"><i class="fa-solid fa-dog"></i>
+          <h3>Ver animales en adopción</h3>
+        </div>
       </a>
       <a href="/frontend/vistas/formulario/formulario.html">
-      <div class="card"><i class="fa-solid fa-clipboard-list"></i><h3>Completar formulario de adopción</h3></div>
+        <div class="card"><i class="fa-solid fa-clipboard-list"></i>
+          <h3>Completar formulario de adopción</h3>
+        </div>
       </a>
       <a href="/frontend/vistas/tienda/tienda.html">
-      <div class="card"><i class="fa-solid fa-store"></i><h3>Comprar productos</h3></div>
+        <div class="card"><i class="fa-solid fa-store"></i>
+          <h3>Comprar productos</h3>
+        </div>
       </a>
       <a href="https://wa.me/5491168353038">
-      <div class="card"><i class="fa-brands fa-whatsapp"></i><h3>Chatear con veterinario</h3></div>
+        <div class="card"><i class="fa-brands fa-whatsapp"></i>
+          <h3>Chatear con veterinario</h3>
+        </div>
       </a>
     </div>
   </section>
@@ -51,4 +63,5 @@
     <p class="copy">© 2025 VetCarruseles - Todos los derechos reservados</p>
   </footer>
 </body>
+
 </html>
