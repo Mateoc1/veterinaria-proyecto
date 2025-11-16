@@ -177,6 +177,66 @@ tr:hover {
   box-shadow: 0 8px 20px rgba(88,101,242,0.25);
 }
 
+/* Contenedor general */
+.usuarios-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.usuarios-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tarjeta de usuario */
+.usuario-card {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.usuario-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+/* Info del usuario */
+.usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.usuario-info i {
+  font-size: 40px;
+  color: #4A90E2;
+}
+
+/* Nombre y correo */
+.usuario-nombre {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.usuario-email {
+  font-size: 14px;
+  color: #666;
+}
+
+
 /* ===== FOOTER ===== */
 footer {
   margin-top: 3rem;

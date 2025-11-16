@@ -4,21 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VetCare - Historial Clínico</title>
-  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/styles.css">
-  <link rel="stylesheet" href="/veterinaria-proyecto/frontend/styles/historialStyle.css">
+  <link rel="stylesheet" href="/frontend/styles/historialStyle.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body class="doctor">
   <header>
     <nav>
-        <a href="../doc.html" class="logo-link">
-          <i class="fa-solid fa-paw"></i> VetCare
-        </a>
+      <div class="logo"><i class="fa-solid fa-stethoscope"></i> VetCarruseles Doctor</div>
       <ul>
-        <li><a href="../doc.html">Inicio</a></li>
-        <li><a href="#">Turnos</a></li>
-        <li><a href="../Verhistorial/Acthistorial.html">Historial Clínico</a></li>
+        <li><a href="/frontend/vistas/doc.html">Inicio</a></li>
+        <li><a href="https://wa.me">Consultas</a></li>
+        <li><a href="../vistas/verUsuarios/verusuario.html">Pacientes</a></li>
       </ul>
     </nav>
   </header>
@@ -31,21 +28,21 @@
       <!-- Lista de animales -->
       <div class="animal-list">
         <div class="animal" onclick="mostrarHistorial('Luna')">
-          <img src="../images/perro1.jpg" alt="Luna">
+          <img src="/src/img/labrador.png" alt="Luna">
           <div>
             <h4>Luna</h4>
             <p>Perrita - Labrador</p>
           </div>
         </div>
         <div class="animal" onclick="mostrarHistorial('Michi')">
-          <img src="../images/gato1.jpg" alt="Michi">
+          <img src="/src/img/persa.png" alt="Michi">
           <div>
             <h4>Michi</h4>
             <p>Gato - Persa</p>
           </div>
         </div>
         <div class="animal" onclick="mostrarHistorial('Roco')">
-          <img src="../images/perro2.jpg" alt="Roco">
+          <img src="/src/img/beagle.png" alt="Roco">
           <div>
             <h4>Roco</h4>
             <p>Perro - Beagle</p>
@@ -60,23 +57,18 @@
     </div>
   </section>
 
-  <footer>
-    <p><i class="fa-solid fa-paw"></i> VetCare - Doctor</p>
-    <p class="copy">© 2025 VetCare - Todos los derechos reservados</p>
-  </footer>
-
   <script>
     const historiales = {
       'Luna': {
-        foto: '../images/perro1.jpg',
+        foto: '/src/img/labrador.png',
         texto: 'Control general. Vacunas al día. Se recomienda revisión dental el próximo mes.'
       },
       'Michi': {
-        foto: '../images/gato1.jpg',
+        foto: '/src/img/persa.png',
         texto: 'Gato tranquilo. Peso estable. Se aplicó antiparasitario interno y externo.'
       },
       'Roco': {
-        foto: '../images/perro2.jpg',
+        foto: '/src/img/beagle.png',
         texto: 'Revisión post operatoria exitosa. Herida cicatrizando bien.'
       }
     };
