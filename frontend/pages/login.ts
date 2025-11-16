@@ -1,4 +1,8 @@
-const API_BASE = "http://localhost:3001";
+/**
+ * Página de Login - Lógica del cliente
+ */
+
+import { api } from "../services/api";
 
 function qs<T extends Element>(sel: string): T {
   const el = document.querySelector(sel);
@@ -7,38 +11,26 @@ function qs<T extends Element>(sel: string): T {
 }
 
 async function checkSession() {
-  const r = await fetch(`${API_BASE}/api/session`, {
-    credentials: "include"
-  });
-  const data = await r.json();
-  if (data && data.loggedIn) {
-    window.location.href = "/";
+  const response = await api.getSession();
+  if (response.ok && response.data?.loggedIn) {
+    window.location.href = "/frontend/vistas/index.html";
   }
 }
 
 async function doLogin(email: string, password: string) {
-  const r = await fetch(`${API_BASE}/api/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ email, password })
-  });
-  const data = await r.json();
-  if (!r.ok || !data.ok) {
-    throw new Error(data.error || "Error de login");
+  const response = await api.login(email, password);
+  if (!response.ok) {
+    throw new Error(response.error || "Error de login");
   }
-  return data;
+  return response.data;
 }
 
 async function requestPasswordReset(email: string) {
-  const r = await fetch(`${API_BASE}/api/forgot-password`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email })
-  });
-  const data = await r.json();
-  if (!r.ok) throw new Error(data.error || "No se pudo solicitar el reseteo");
-  return data;
+  const response = await api.forgotPassword(email);
+  if (!response.ok) {
+    throw new Error(response.error || "No se pudo solicitar el reseteo");
+  }
+  return response.data;
 }
 
 function isValidEmail(email: string) {
@@ -66,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     try {
       await doLogin(email, password);
-      window.location.href = "/";
+      window.location.href = "/frontend/vistas/index.html";
     } catch (err: any) {
       errorEl.textContent = err.message || "Credenciales invalidas";
     }
@@ -89,3 +81,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
+

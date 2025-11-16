@@ -1,3 +1,9 @@
+/**
+ * Página de Adopciones - Lógica del cliente
+ */
+
+import { api } from "../services/api";
+
 interface Mascota {
   id: string;
   nombre: string;
@@ -6,58 +12,43 @@ interface Mascota {
   adoptable: boolean;
 }
 
-const listaMascotasEl = document.getElementById("listaMascotas") as HTMLDivElement;
-const listaAdopcionesEl = document.getElementById("listaAdopciones") as HTMLDivElement;
-const formulario = document.getElementById("formularioAgregar") as HTMLFormElement;
-const inputNombre = document.getElementById("inputNombre") as HTMLInputElement;
-const inputEspecie = document.getElementById("inputEspecie") as HTMLInputElement;
-const inputFoto = document.getElementById("inputFoto") as HTMLInputElement;
-const inputAdoptable = document.getElementById("inputAdoptable") as HTMLInputElement;
-const filtroAdoptables = document.getElementById("filtroAdoptables") as HTMLInputElement;
-const avisoPerfil = document.getElementById("avisoPerfil") as HTMLDivElement;
+function qs<T extends Element>(sel: string): T {
+  const el = document.querySelector(sel);
+  if (!el) throw new Error(`Elemento no encontrado: ${sel}`);
+  return el as T;
+}
 
-
-const STORAGE_KEY = "vet_mascotas_v1";
-
+const listaMascotasEl = qs<HTMLDivElement>("#listaMascotas");
+const listaAdopcionesEl = qs<HTMLDivElement>("#listaAdopciones");
+const formulario = qs<HTMLFormElement>("#formularioAgregar");
+const inputNombre = qs<HTMLInputElement>("#inputNombre");
+const inputEspecie = qs<HTMLInputElement>("#inputEspecie");
+const inputFoto = qs<HTMLInputElement>("#inputFoto");
+const inputAdoptable = qs<HTMLInputElement>("#inputAdoptable");
+const filtroAdoptables = qs<HTMLInputElement>("#filtroAdoptables");
+const avisoPerfil = qs<HTMLDivElement>("#avisoPerfil");
 
 let mascotas: Mascota[] = [];
 
-
-function generarId(): string {
-  return "m-" + Math.random().toString(36).slice(2, 9);
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c] || c));
 }
 
-
-function guardarEnLocal(): void {
+async function cargarMascotas() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(mascotas));
-  } catch (e) {
-    console.warn("No se pudo guardar en localStorage", e);
-  }
-}
-
-
-function cargarDesdeLocal(): void {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) {
-    try {
-      const parsed = JSON.parse(raw) as Mascota[];
-      mascotas = parsed;
-      return;
-    } catch {
+    const response = await api.getPets();
+    if (response.ok && response.data) {
+      mascotas = response.data;
+    } else {
+      console.warn("No se pudieron cargar las mascotas:", response.error);
       mascotas = [];
     }
+  } catch (err) {
+    console.error("Error al cargar mascotas:", err);
+    mascotas = [];
   }
-
-  // ESTOS SON EJEMPLOS PARA TENER ALGO DE UI, LOS SACO DESPUES, NO ROMPAN LOS HUEVOS
-  mascotas = [
-    { id: generarId(), nombre: "Rocco", especie: "Perro", foto: "", adoptable: false },
-    { id: generarId(), nombre: "Nina", especie: "Perro", foto: "", adoptable: true },
-    { id: generarId(), nombre: "Luna", especie: "Gato", foto: "", adoptable: true },
-  ];
-  guardarEnLocal();
+  actualizarVistas();
 }
-
 
 function renderizarSelector(lista: Mascota[]) {
   listaMascotasEl.innerHTML = "";
@@ -79,7 +70,6 @@ function renderizarSelector(lista: Mascota[]) {
     div.appendChild(img);
     div.appendChild(name);
     div.addEventListener("click", () => {
-
       const previo = listaMascotasEl.querySelector(".mascota.seleccionada");
       if (previo) previo.classList.remove("seleccionada");
       div.classList.add("seleccionada");
@@ -87,7 +77,6 @@ function renderizarSelector(lista: Mascota[]) {
     listaMascotasEl.appendChild(div);
   }
 }
-
 
 function renderizarAdopciones(lista: Mascota[]) {
   listaAdopcionesEl.innerHTML = "";
@@ -124,49 +113,49 @@ function renderizarAdopciones(lista: Mascota[]) {
   }
 }
 
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c] || c));
-}
-
-
-
-function agregarMascotaDesdeFormulario(ev?: Event) {
+async function agregarMascotaDesdeFormulario(ev?: Event) {
   if (ev) ev.preventDefault();
   const nombre = inputNombre.value.trim();
   const especie = inputEspecie.value.trim();
   const foto = inputFoto.value.trim();
   const adoptable = inputAdoptable.checked;
+  
   if (!nombre || !especie) {
     alert("Completa nombre y especie");
     return;
   }
-  const nueva: Mascota = {
-    id: generarId(),
-    nombre,
-    especie,
-    foto,
-    adoptable,
-  };
-  mascotas.push(nueva);
-  guardarEnLocal();
-  limpiarFormulario();
-  actualizarVistas();
+
+  try {
+    const response = await api.createPet({ nombre, especie, foto, adoptable });
+    if (response.ok) {
+      limpiarFormulario();
+      await cargarMascotas();
+    } else {
+      alert("Error al agregar mascota: " + (response.error || "Error desconocido"));
+    }
+  } catch (err: any) {
+    alert("Error al agregar mascota: " + (err.message || "Error desconocido"));
+  }
 }
 
+async function eliminarMascota(id: string) {
+  const mascota = mascotas.find(m => m.id === id);
+  if (!mascota) return;
 
-function eliminarMascota(id: string) {
-  const idx = mascotas.findIndex(m => m.id === id);
-  if (idx === -1) return;
-
-  const ok = confirm(`Eliminar a ${mascotas[idx].nombre}?`);
+  const ok = confirm(`Eliminar a ${mascota.nombre}?`);
   if (!ok) return;
-  mascotas.splice(idx, 1);
-  guardarEnLocal();
-  actualizarVistas();
+
+  try {
+    const response = await api.deletePet(id);
+    if (response.ok) {
+      await cargarMascotas();
+    } else {
+      alert("Error al eliminar mascota: " + (response.error || "Error desconocido"));
+    }
+  } catch (err: any) {
+    alert("Error al eliminar mascota: " + (err.message || "Error desconocido"));
+  }
 }
-
-
-
 
 function obtenerListaFiltrada(): Mascota[] {
   if (filtroAdoptables.checked) {
@@ -174,7 +163,6 @@ function obtenerListaFiltrada(): Mascota[] {
   }
   return mascotas.slice();
 }
-
 
 function actualizarVistas() {
   const lista = obtenerListaFiltrada();
@@ -189,31 +177,25 @@ function limpiarFormulario() {
   inputAdoptable.checked = false;
 }
 
-
-function iniciarApp() {
-  cargarDesdeLocal();
-  actualizarVistas();
-
+async function iniciarApp() {
+  await cargarMascotas();
 
   formulario.addEventListener("submit", (e) => {
     agregarMascotaDesdeFormulario(e);
   });
 
-
-  const btnLimpiar = document.getElementById("btnLimpiar") as HTMLButtonElement;
+  const btnLimpiar = qs<HTMLButtonElement>("#btnLimpiar");
   btnLimpiar.addEventListener("click", () => {
     limpiarFormulario();
   });
-
 
   filtroAdoptables.addEventListener("change", () => {
     actualizarVistas();
   });
 
- 
-  const btnSolicitar = document.getElementById("btnSolicitar") as HTMLButtonElement;
-  const motivoEl = document.getElementById("motivo") as HTMLTextAreaElement;
-  btnSolicitar.addEventListener("click", () => {
+  const btnSolicitar = qs<HTMLButtonElement>("#btnSolicitar");
+  const motivoEl = qs<HTMLTextAreaElement>("#motivo");
+  btnSolicitar.addEventListener("click", async () => {
     const seleccionado = listaMascotasEl.querySelector(".mascota.seleccionada") as HTMLElement | null;
     const motivo = motivoEl.value.trim();
     if (!seleccionado) {
@@ -226,21 +208,20 @@ function iniciarApp() {
       alert("Mascota no encontrada.");
       return;
     }
-  // LUCAS, DESPUES USA ESTA PARTESITA PARA CONECTARLO A LA BD, YO AHORA LO TENGO EN LOCAL STORAGE
-  // PORQUE NI PUTA IDEA COMO CONECTARLO A TU BD
-    const registrosRaw = localStorage.getItem("vet_consultas") || "[]";
-    const registros = JSON.parse(registrosRaw);
-    registros.push({
-      id: "c-" + Date.now(),
-      mascotaId: mascota.id,
-      mascotaNombre: mascota.nombre,
-      motivo,
-      fecha: new Date().toISOString()
-    });
-    localStorage.setItem("vet_consultas", JSON.stringify(registros));
-    alert("Consulta registrada para " + mascota.nombre + ". (Registro local guardado)");
-    motivoEl.value = "";
+
+    try {
+      const response = await api.createAppointment({ petId: mascota.id, motivo });
+      if (response.ok) {
+        alert("Consulta registrada para " + mascota.nombre + ".");
+        motivoEl.value = "";
+      } else {
+        alert("Error al registrar consulta: " + (response.error || "Error desconocido"));
+      }
+    } catch (err: any) {
+      alert("Error al registrar consulta: " + (err.message || "Error desconocido"));
+    }
   });
 }
 
 document.addEventListener("DOMContentLoaded", iniciarApp);
+
