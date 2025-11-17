@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// =====================
+// Prisma Configuration
+// =====================
 
 generator client {
   provider = "prisma-client-js"
@@ -13,61 +11,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// =====================
+// USERS
+// =====================
+
 model users {
-  idusuario   Int      @id @default(autoincrement())
-  name        String?
-  lastname    String?
-  email       String   @unique
-  password_hash String
-  role        String   @default("user")
-  created_at  DateTime @default(now())
+  idusuario       Int               @id @default(autoincrement())
+  name            String?
+  lastname        String?
+  email           String            @unique
+  password_hash   String
+  role            String            @default("user")
+  created_at      DateTime          @default(now())
 
   // relations
-  animales    animal[] @relation("UserAnimales")
+  animales        animal[]          @relation("UserAnimales")
   password_resets password_resets[]
 
   @@map("users")
-
 }
 
-// ============ FORMS ============
+// =====================
+// PASSWORD RESETS
+// =====================
+
+model password_resets {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  reset_token     String?
+  expiration_date DateTime?
+
+  // relations
+  user users @relation(fields: [user_id], references: [idusuario])
+
+  @@map("password_resets")
+}
+
+// =====================
+// FORMULARIOS
+// =====================
+
 model formulario {
-  idformulario                    Int     @id @default(autoincrement())
-  nombre                          String?
-  apellido                        String?
-  telefono                        Int?
-  mail                            String?
-  fecha_nacimiento                String?
-  direccion                       String?
-  ciudad                          String?
-  provincia                       String?
-  codigo_postal                   Int?
-  pais                            String?
-  tipo_documento                  String?
-  numero_documento                Int?
-  tipo_vivienda                   String
-  espacio_seguro                  String
-  tiempo_solo                     Int
-  personas_encasa                 Int
-  familia_deacuerdo               String
-  otras_mascotas_anteriormente    String
-  tipo                            String
-  eventos                         String
-  otras_mascotas_actualmente      Int
-  tipo_mascotas_actual            String
-  recursos                        String
-  vacunar_y_esterilizar           String
-  encargado_cuidado               String
-  sitio_animal_solo               String
-  rol_del_animal                  String
-  estado                          String
+  idformulario                 Int    @id @default(autoincrement())
+  nombre                       String?
+  apellido                     String?
+  telefono                     Int?
+  mail                         String?
+  fecha_nacimiento             String?
+  direccion                    String?
+  ciudad                       String?
+  provincia                    String?
+  codigo_postal                Int?
+  pais                         String?
+  tipo_documento               String?
+  numero_documento             Int?
+  tipo_vivienda                String
+  espacio_seguro               String
+  tiempo_solo                  Int
+  personas_encasa              Int
+  familia_deacuerdo            String
+  otras_mascotas_anteriormente String
+  tipo                         String
+  eventos                      String
+  otras_mascotas_actualmente   Int
+  tipo_mascotas_actual         String
+  recursos                     String
+  vacunar_y_esterilizar        String
+  encargado_cuidado            String
+  sitio_animal_solo            String
+  rol_del_animal               String
+  estado                       String
 
   @@map("formulario")
 }
 
-// ============ PRODUCTS ============
+// =====================
+// PRODUCTS
+// =====================
+
 model productos {
-  idproducto Int     @id @default(autoincrement())
+  idproducto Int       @id @default(autoincrement())
   nombre     String?
   url_imagen String?
   stock      Int
@@ -78,9 +101,12 @@ model productos {
   @@map("productos")
 }
 
-// ============ PURCHASES ============
+// =====================
+// PURCHASES
+// =====================
+
 model compra {
-  idcompra Int  @id @default(autoincrement())
+  idcompra Int @id @default(autoincrement())
   producto Int?
   unidades Int?
   precio   Int?
@@ -91,29 +117,32 @@ model compra {
   @@map("compra")
 }
 
-// ============ ANIMALS ============
+// =====================
+// ANIMALS
+// =====================
+
 model animal {
   idanimal    Int      @id @default(autoincrement())
   nombre      String?
   edad        Int?
   descripcion String?
   imagen_m    String?
-  dueno       Int?     @map("dueño")
-  perfilId    Int?     // <-- FK al perfil
+  dueno       Int?      @map("dueño")
+  perfilId    Int?
 
   // relations
-
-  duenoRef    users?    @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
-  perfil      perfil?   @relation(fields: [perfilId], references: [idperfil], onDelete: SetNull)
+  duenoRef    users?             @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
+  perfil      perfil?            @relation(fields: [perfilId], references: [idperfil], onDelete: SetNull)
   turnos      turno[]
-
-  historiales historial_medico[]
+  historiales historial_medico[] @relation("AnimalHistorial")
 
   @@map("animal")
 }
 
+// =====================
+// APPOINTMENTS (TURNOS)
+// =====================
 
-// ============ APPOINTMENTS ============
 model turno {
   idturno Int    @id @default(autoincrement())
   mascota Int?
@@ -121,80 +150,75 @@ model turno {
   fecha   String?
   estado  String
 
-  // relations
   mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("turno")
 }
 
-// ============ PROFILES ============
+// =====================
+// PROFILES
+// =====================
+
 model perfil {
-  idperfil   Int       @id @default(autoincrement())
-  nombre     String?
-  apellido   String?
-  telefono   Int?
-  mail       String?
+  idperfil  Int         @id @default(autoincrement())
+  nombre    String?
+  apellido  String?
+  telefono  Int?
+  mail      String?
 
   // relations
-  mascotas   animal[]      // un perfil tiene varias mascotas
-  consultas  consultas[]
+  mascotas  animal[]
+  consultas consultas[]
 
   @@map("perfil")
 }
 
+// =====================
+// CONSULTATIONS
+// =====================
 
-// ============ CONSULTATIONS ============
 model consultas {
   idconsulta  Int     @id @default(autoincrement())
   nombre      Int?
   descripcion String?
 
-  // relations
   perfilRef perfil? @relation(fields: [nombre], references: [idperfil], onDelete: SetNull)
 
   @@map("consultas")
 }
 
-// ============ MEDICAL HISTORY ============
+// =====================
+// MEDICAL HISTORY
+// =====================
+
 model historial_medico {
   idhistorial    Int     @id @default(autoincrement())
   mascota        Int?
   turnos_pasados String?
   vacunas        String?
 
-  // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
+  mascotaRef animal? @relation("AnimalHistorial", fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("historial_medico")
 }
 
+// =====================
+// BACKEND EXTRA MODELS
+// =====================
 
-model password_resets {
-  id                Int      @id @default(autoincrement())
-  user_id           Int
-  reset_token       String?
-  expiration_date   DateTime?
-
-  // relations
-  user              users    @relation(fields: [user_id], references: [idusuario])
-
-  @@map("password_resets")
-}
-
-// ----- Modelos adicionales para compatibilidad con el backend -----
 model pet {
-  id        String  @id
+  id        String   @id
   nombre    String
   especie   String
   foto      String?
-  adoptable Boolean @default(true)
+  adoptable Boolean  @default(true)
   createdAt DateTime @default(now())
 
   @@map("pets")
 }
 
 model appointment {
-  id      String  @id
+  id      String   @id
   userId  Int?
   petId   String?
   motivo  String
@@ -210,4 +234,3 @@ model coupon {
 
   @@map("coupons")
 }
-

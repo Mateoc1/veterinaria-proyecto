@@ -2307,7 +2307,7 @@ vary@^1, vary@^1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-"veterinaria-backend@file:C:\\Users\\Usuario\\Desktop\\mitingay\\veterinaria-proyecto\\Backend":
+"veterinaria-backend@file:C:\\Users\\usuario\\Desktop\\proyectos mitingay\\veterinaria\\veterinaria-proyecto\\Backend":
   version "1.0.0"
   resolved "file:Backend"
   dependencies:
@@ -2321,7 +2321,7 @@ vary@^1, vary@^1.1.2:
     nodemailer "^7.0.10"
     pg "^8.13.1"
 
-"veterinaria-frontend@file:C:\\Users\\Usuario\\Desktop\\mitingay\\veterinaria-proyecto\\frontend":
+"veterinaria-frontend@file:C:\\Users\\usuario\\Desktop\\proyectos mitingay\\veterinaria\\veterinaria-proyecto\\frontend":
   version "1.0.0"
   resolved "file:frontend"
 
