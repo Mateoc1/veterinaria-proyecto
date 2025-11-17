@@ -21,6 +21,7 @@ import cartRouter from "./routes/cart";
 import couponsRouter from "./routes/coupons";
 import petsRouter from "./routes/pets";
 import appointmentsRouter from "./routes/appointments";
+import paymentsRouter from "./routes/payments";
 
 dotenv.config();
 
@@ -176,6 +177,7 @@ app.use("/api/cart", cartRouter);
 app.use("/api/coupons", couponsRouter);
 app.use("/api/pets", petsRouter);
 app.use("/api/appointments", appointmentsRouter);
+app.use("/api/payments", paymentsRouter);
 
 // Redirects
 app.get("/frontend/vistas/register/index.html", (_req, res) => {
