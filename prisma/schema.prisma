@@ -227,7 +227,7 @@ model historial_medico {
   @@map("historial_medico")
 }
 
-model User {
+/*model User {
   id           Int             @id @default(autoincrement())
   name         String?
   lastname     String?
@@ -251,3 +251,4 @@ model PasswordReset {
 
   @@map("password_resets")
 }
+*/

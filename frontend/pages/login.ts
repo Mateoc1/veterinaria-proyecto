@@ -13,7 +13,7 @@ function qs<T extends Element>(sel: string): T {
 async function checkSession() {
   const response = await api.getSession();
   if (response.ok && response.data?.loggedIn) {
-    window.location.href = "/frontend/vistas/index.html";
+    window.location.href = "/";
   }
 }
 
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     try {
       await doLogin(email, password);
-      window.location.href = "/frontend/vistas/index.html";
+      window.location.href = "/";
     } catch (err: any) {
       errorEl.textContent = err.message || "Credenciales invalidas";
     }

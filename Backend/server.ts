@@ -184,6 +184,10 @@ app.get("/adopciones",(_req, res) => {
 });
 
 
+app.get("/tienda",(_req, res) => {
+  res.sendFile(path.join(FRONT_DIR, "tienda/tienda.html"));
+});
+
 
 
 

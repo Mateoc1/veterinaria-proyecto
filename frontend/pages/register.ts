@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         msgEl.textContent = "Registro exitoso";
         setTimeout(() => {
-          window.location.href = "/frontend/vistas/login/login.html";
+          window.location.href = "/login";
         }, 1000);
       } else {
         msgEl.textContent = response.error || "Error al registrar";
