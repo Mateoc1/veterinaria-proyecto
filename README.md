@@ -42,8 +42,9 @@ El sistema define tres roles principales:
 - APIs externas: MercadoPago, Chatbot (WhatsApp)
 
 **Base de Datos:**  
-- SQLite (relacional, ligera y portable)
-
+- Prisma (ORM)
+- PostreSQL
+  
 **Seguridad:**  
 - Cifrado de contraseñas con bcrypt o argon2  
 - Validación de entradas y consultas seguras  

@@ -16,7 +16,23 @@
     "dev:all": "npm run watch --prefix frontend & npm run dev --prefix Backend",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init"
-  }, 
+  },
+  "workspaces": [
+    "Backend",
+    "frontend"
+  ],
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "bcrypt": "^6.0.0",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "nodemailer": "^7.0.10",
+    "pg": "^8.16.3"
+  },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/connect-pg-simple": "^7.0.3",
@@ -30,21 +46,5 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
-  },
-  "workspaces": [
-    "Backend",
-    "frontend"
-  ],
-  "dependencies": {
-    "@prisma/client": "^6.19.0",
-    "bcrypt": "^6.0.0",
-    "connect-pg-simple": "^9.0.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
-    "express-session": "^1.18.2",
-    "nodemailer": "^7.0.10",
-    "pg": "^8.16.3"
   }
 }

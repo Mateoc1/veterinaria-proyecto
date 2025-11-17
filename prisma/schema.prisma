@@ -6,135 +6,46 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// ============ AUTHENTICATION ============
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  role         String    @default("user")
-  createdAt    DateTime  @default(now()) @map("created_at")
+// ============ USERS / AUTHENTICATION ============
+model users {
+  idusuario   Int      @id @default(autoincrement())
+  name        String?
+  lastname    String?
+  email       String   @unique
+  password_hash String
+  role        String   @default("user")
+  created_at  DateTime @default(now())
 
-  passwordResets PasswordReset[]
-  appointments   Appointment[]
+  // relations
+  animales    animal[] @relation("UserAnimales")
+  password_resets password_resets[]
 
   @@map("users")
 }
 
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_resets")
-}
-
-// ============ PETS / ADOPTIONS ============
-model Pet {
-  id         String       @id
-  nombre     String
-  especie    String
-  foto       String?
-  adoptable  Boolean      @default(false)
-  createdAt  DateTime     @default(now()) @map("created_at")
-
-  appointments Appointment[]
-
-  @@map("pets")
-}
-
-// ============ APPOINTMENTS ============
-model Appointment {
-  id        String   @id
-  userId    Int?     @map("user_id")
-  petId     String   @map("pet_id")
-  motivo    String
-  fecha     DateTime @default(now())
-  estado    String   @default("pendiente")
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  pet  Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
-
-  @@map("appointments")
-}
-
-// ============ COUPONS ============
-model Coupon {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("coupons")
-}
-
-// ============ PRODUCTS ============
-model Product {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  precio    Float
-  stock     Int      @default(0)
-  urlImagen String?  @map("url_imagen")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("products")
-}
-
-// ============ LEGACY MODELS (mantener compatibilidad) ============
-model cliente {
-  idusuario   Int      @id @default(autoincrement())
-  mail        String
-  contrasena  String   @map("contraseña")
+model password_resets {
+  id                Int      @id @default(autoincrement())
+  user_id           Int
+  reset_token       String?
+  expiration_date   DateTime?
 
   // relations
-  animales    animal[] @relation("ClienteAnimales")
+  user              users    @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
 
-  @@map("cliente")
-}
-
-model formulario {
-  idformulario               Int     @id @default(autoincrement())
-  nombre                     String?
-  apellido                   String?
-  telefono                   Int?
-  mail                       String?
-  fecha_nacimiento           String?
-  direccion                  String?
-  ciudad                     String?
-  provincia                  String?
-  codigo_postal              Int?
-  pais                       String?
-  tipo_documento             String?
-  numero_documento           Int?
-  tipo_vivienda              String
-  espacio_seguro             String
-  tiempo_solo                Int
-  personas_encasa            Int
-  familia_deacuerdo          String
-  otras_mascotas_anteriormente String
-  tipo                       String
-  otras_mascotas_actualmente Int
-  tipo_mascotas_actual       String
-  recursos                   String
-  vacunar_y_esterilizar      String
-  encargado_cuidado          String
-  sitio_animal_solo          String
-  rol_del_animal             String
-  estado                     String
+  @@map("password_resets")
+// (Fin del schema)
+  sitio_animal_solo               String
+  rol_del_animal                  String
+  estado                          String
 
   @@map("formulario")
 }
 
+// ============ PRODUCTS ============
 model productos {
   idproducto Int     @id @default(autoincrement())
   nombre     String?
@@ -147,6 +58,7 @@ model productos {
   @@map("productos")
 }
 
+// ============ PURCHASES ============
 model compra {
   idcompra Int  @id @default(autoincrement())
   producto Int?
@@ -154,28 +66,32 @@ model compra {
   precio   Int?
 
   // relations
-  productoRef productos? @relation(fields: [producto], references: [idproducto])
+  productoRef productos? @relation(fields: [producto], references: [idproducto], onDelete: SetNull)
 
   @@map("compra")
 }
 
+// ============ ANIMALS ============
 model animal {
-  idanimal   Int      @id @default(autoincrement())
-  nombre     String?
-  edad       Int?
+  idanimal    Int      @id @default(autoincrement())
+  nombre      String?
+  edad        Int?
   descripcion String?
-  imagen_m   String?
-  dueno      Int?     @map("dueño")
+  imagen_m    String?
+  dueno       Int?     @map("dueño")
+  perfilId    Int?     // <-- FK al perfil
 
   // relations
-  duenoRef cliente? @relation("ClienteAnimales", fields: [dueno], references: [idusuario])
-  turnos    turno[]
-  perfiles  perfil[]
+  duenoRef    users?    @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
+  perfil      perfil?   @relation(fields: [perfilId], references: [idperfil], onDelete: SetNull)
+  turnos      turno[]
   historiales historial_medico[]
 
   @@map("animal")
 }
 
+
+// ============ APPOINTMENTS ============
 model turno {
   idturno Int    @id @default(autoincrement())
   mascota Int?
@@ -184,37 +100,40 @@ model turno {
   estado  String
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("turno")
 }
 
+// ============ PROFILES ============
 model perfil {
-  idperfil Int    @id @default(autoincrement())
-  nombre   String?
-  apellido String?
-  telefono Int?
-  mail     String?
-  mascota  Int?
+  idperfil   Int       @id @default(autoincrement())
+  nombre     String?
+  apellido   String?
+  telefono   Int?
+  mail       String?
 
   // relations
-  mascotaRef animal?     @relation(fields: [mascota], references: [idanimal])
+  mascotas   animal[]      // un perfil tiene varias mascotas
   consultas  consultas[]
 
   @@map("perfil")
 }
 
+
+// ============ CONSULTATIONS ============
 model consultas {
   idconsulta  Int     @id @default(autoincrement())
   nombre      Int?
   descripcion String?
 
   // relations
-  perfilRef perfil? @relation(fields: [nombre], references: [idperfil])
+  perfilRef perfil? @relation(fields: [nombre], references: [idperfil], onDelete: SetNull)
 
   @@map("consultas")
 }
 
+// ============ MEDICAL HISTORY ============
 model historial_medico {
   idhistorial    Int     @id @default(autoincrement())
   mascota        Int?
@@ -222,10 +141,11 @@ model historial_medico {
   vacunas        String?
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("historial_medico")
 }
+<<<<<<< HEAD
 
 /*model User {
   id           Int             @id @default(autoincrement())
@@ -252,3 +172,5 @@ model PasswordReset {
   @@map("password_resets")
 }
 */
+=======
+>>>>>>> 6203609390c3c685550f841f6c7632b2926d5910

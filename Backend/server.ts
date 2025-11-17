@@ -4,7 +4,7 @@
 
 /// <reference path="./types/express-session.d.ts" />
 
-import express, { Request } from "express";
+import express, { Express, Request, Response } from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import cors from "cors";
@@ -43,11 +43,15 @@ import appointmentsRouter from "./routes/appointments.js";
 
 dotenv.config();
 
+
 // Definir __dirname para módulos ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+
+
 
 const PORT = Number(process.env.PORT || 3001);
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev_secret";
@@ -65,6 +69,7 @@ app.use(
     store: new PgSession({
       conString: process.env.DATABASE_URL,
       tableName: "session",
+      createTableIfMissing: true,
     }),
     secret: SESSION_SECRET,
     resave: false,
@@ -222,7 +227,7 @@ app.post("/api/login", async (req, res) => {
     session.userId = user.id;
     session.userEmail = user.email;
     session.userRole = user.role;
-    
+
     // Redirigir según el rol del usuario
     let redirectUrl = "/";
     if (user.role === "admin") {
@@ -232,7 +237,7 @@ app.post("/api/login", async (req, res) => {
     } else {
       redirectUrl = "/"; // usuario normal -> index.html
     }
-    
+
     res.json({ ok: true, user, redirect: redirectUrl });
   } catch (e: any) {
     res.status(401).json({ ok: false, error: e.message || "credenciales invalidas" });
