@@ -5,14 +5,11 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
-    "outDir": "dist",
-    "typeRoots": ["./Backend/types", "./node_modules/@types"],
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "Backend/types/*"]
-    }
+    "skipLibCheck": true
   },
-  "include": ["Backend/**/*.ts", "Backend/types/**/*.d.ts", "src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "files": [],
+  "references": [
+    { "path": "./Backend" },
+    { "path": "./frontend" }
+  ]
 }

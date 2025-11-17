@@ -1,16 +1,25 @@
 {
-  "name": "mitin",
+  "name": "veterinaria-proyecto",
   "version": "1.0.0",
+  "description": "Proyecto Veterinaria - Monorepo",
+  "private": true,
   "scripts": {
-    "build": "tsc",
+    "install:all": "npm install && cd Backend && npm install && cd ../frontend && npm install",
+    "build": "npm run build --prefix Backend && npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix Backend",
+    "build:frontend": "npm run build --prefix frontend",
     "watch": "tsc -w",
-    "start": "node dist/Backend/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only Backend/server.ts",
+    "watch:backend": "npm run watch --prefix Backend",
+    "watch:frontend": "npm run watch --prefix frontend",
+    "start": "npm start --prefix Backend",
+    "dev": "npm run dev --prefix Backend",
+    "dev:all": "npm run watch --prefix frontend & npm run dev --prefix Backend",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init"
-  },
+  }, 
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/connect-pg-simple": "^7.0.3",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/express-session": "^1.18.2",
@@ -22,19 +31,20 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   },
+  "workspaces": [
+    "Backend",
+    "frontend"
+  ],
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^6.19.0",
     "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
-    "better-sqlite3": "^12.4.1",
-    "connect-sqlite3": "^0.9.16",
+    "connect-pg-simple": "^9.0.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "nodemailer": "^7.0.10",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "pg": "^8.16.3"
   }
 }

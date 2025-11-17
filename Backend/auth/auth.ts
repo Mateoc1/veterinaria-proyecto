@@ -1,15 +1,22 @@
+/**
+ * Autenticación usando Prisma con PostgreSQL
+ */
+
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import { prisma } from "../lib/prisma.js";
 
-dotenv.config();
-
-// Esta función ahora no hace nada, pero la dejamos
-// para que server.ts pueda seguir llamándola sin romperse.
 export async function initAuthSchema() {
-  // Con Prisma el esquema lo crean las migraciones,
-  // no hace falta crear tablas a mano acá.
+  // Prisma crea las tablas automáticamente con las migraciones
+  // Solo verificamos la conexión
+  try {
+    await prisma.$connect();
+    console.log("✅ Conectado a PostgreSQL con Prisma");
+  } catch (error) {
+    console.error("❌ Error conectando a PostgreSQL:", error);
+    throw error;
+  }
 }
 
 // ---------- REGISTRO ----------
@@ -21,28 +28,31 @@ export async function registerUser(input: {
   password: string;
 }) {
   const { name, lastname, email, password } = input;
-
-  // ¿Ya existe un usuario con ese email?
-  const existing = await prisma.user.findUnique({
+  
+  // Verificar si el usuario ya existe
+  const exists = await prisma.user.findUnique({
     where: { email },
   });
-
-  if (existing) {
+  
+  if (exists) {
     throw new Error("El email ya esta registrado");
   }
-
+  
   const hash = await bcrypt.hash(password, 10);
-
+  
   const user = await prisma.user.create({
     data: {
       name: name ?? null,
       lastname: lastname ?? null,
       email,
       passwordHash: hash,
-      // role y createdAt usan sus defaults
+    },
+    select: {
+      id: true,
+      email: true,
     },
   });
-
+  
   return { id: user.id, email: user.email };
 }
 
@@ -52,17 +62,21 @@ export async function loginUser(email: string, password: string) {
   const user = await prisma.user.findUnique({
     where: { email },
   });
-
+  
   if (!user) {
     throw new Error("Credenciales invalidas");
   }
-
+  
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) {
     throw new Error("Credenciales invalidas");
   }
-
-  return { id: user.id, email: user.email, role: user.role };
+  
+  return {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  };
 }
 
 // ---------- CREAR TOKEN DE RESET ----------
@@ -71,21 +85,22 @@ export async function createPasswordReset(email: string) {
   const user = await prisma.user.findUnique({
     where: { email },
   });
-
-  if (!user) return null;
-
+  
+  if (!user) {
+    return null;
+  }
+  
   const token = crypto.randomBytes(32).toString("hex");
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
-
+  
   await prisma.passwordReset.create({
     data: {
       userId: user.id,
       token,
       expiresAt,
-      used: false,
     },
   });
-
+  
   return { token, userId: user.id };
 }
 
@@ -95,12 +110,15 @@ export async function validateResetToken(token: string) {
   const row = await prisma.passwordReset.findUnique({
     where: { token },
   });
-
-  if (!row) return null;
-  if (row.used) return null;
-  if (row.expiresAt.getTime() < Date.now()) return null;
-
-  // devolvemos lo que antes devolvía tu función
+  
+  if (!row || row.used) {
+    return null;
+  }
+  
+  if (row.expiresAt < new Date()) {
+    return null;
+  }
+  
   return {
     id: row.id,
     user_id: row.userId,

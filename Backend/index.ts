@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { registerUser, loginUser, initAuthSchema } from "./auth/auth";
-import prisma from "./lib/prisma";
+import { registerUser, loginUser, initAuthSchema } from "./auth/auth.js";
+import prisma from "./lib/prisma.js";
 import path from "path";
 import { fileURLToPath } from "url";
 

@@ -1,4 +1,4 @@
-import { Producto } from "./producto";
+import { Producto } from "./producto.js";
 
 export class Carrito {
   private productos: Map<number, { producto: Producto; cantidad: number }> = new Map();

@@ -1,10 +1,23 @@
-import express from "express";
+/**
+ * Servidor principal - Solo lógica del servidor
+ */
+
+/// <reference path="./types/express-session.d.ts" />
+
+import express, { Request } from "express";
 import session from "express-session";
-import SQLiteStoreFactory from "connect-sqlite3";
+import connectPgSimple from "connect-pg-simple";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+
+// Helper para acceder a las propiedades de sesión personalizadas
+type SessionWithUser = {
+  userId?: number;
+  userEmail?: string;
+  userRole?: string;
+} & session.SessionData;
 import {
   initAuthSchema,
   registerUser,
@@ -21,6 +34,13 @@ import turnosRouter from "./routes/turnos.js";
 import comprasRouter from "./routes/compras.js";
 import formulariosRouter from "./routes/formularios.js";
 
+// Importar rutas
+import productsRouter from "./routes/products.js";
+import cartRouter from "./routes/cart.js";
+import couponsRouter from "./routes/coupons.js";
+import petsRouter from "./routes/pets.js";
+import appointmentsRouter from "./routes/appointments.js";
+
 dotenv.config();
 
 // Definir __dirname para módulos ES
@@ -31,20 +51,20 @@ const app = express();
 
 const PORT = Number(process.env.PORT || 3001);
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev_secret";
-const DB_PATH = process.env.DATABASE_PATH || "./src/database/basededatos.sqlite";
 const APP_BASE_URL = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
 
+// Middlewares
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const SQLiteStore = SQLiteStoreFactory(session);
+// Configuración de sesiones con PostgreSQL
+const PgSession = connectPgSimple(session as any);
 app.use(
-  session({
-    store: new SQLiteStore({
-      db: path.basename(DB_PATH),
-      dir: path.dirname(DB_PATH),
-      table: "sessions"
+  (session as any)({
+    store: new PgSession({
+      conString: process.env.DATABASE_URL,
+      tableName: "session",
     }),
     secret: SESSION_SECRET,
     resave: false,
@@ -141,7 +161,8 @@ app.get("/register", (_req, res) => {
 
 app.get("/admin", (req, res) => {
   // Verificar que el usuario tenga rol de admin
-  if (req.session.userRole !== "admin") {
+  const session = req.session as SessionWithUser;
+  if (session.userRole !== "admin") {
     return res.redirect("/login");
   }
   res.sendFile(path.join(FRONT_DIR, "admin.html"));
@@ -149,7 +170,8 @@ app.get("/admin", (req, res) => {
 
 app.get("/doc", (req, res) => {
   // Verificar que el usuario tenga rol de doctor/veterinario
-  if (req.session.userRole !== "doctor" && req.session.userRole !== "veterinario") {
+  const session = req.session as SessionWithUser;
+  if (session.userRole !== "doctor" && session.userRole !== "veterinario") {
     return res.redirect("/login");
   }
   res.sendFile(path.join(FRONT_DIR, "doc.html"));
@@ -169,30 +191,22 @@ app.get("/api-test", (_req, res) => {
   res.sendFile(path.join(FRONT_DIR, "api-test.html"));
 });
 
+
+// Health check
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
-app.get("/api/smtp-verify", async (_req, res) => {
-  const ok = await verifyMailer();
-  res.json({ ok });
-});
-
-app.post("/api/smtp-test", async (req, res) => {
-  const { to } = req.body || {};
-  if (!to) return res.status(400).json({ error: "to requerido" });
-  const ok = await sendTestEmail(to);
-  res.json({ ok });
-});
-
+// Rutas de autenticación
 app.post("/api/register", async (req, res) => {
   try {
     const { name, lastname, email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: "faltan datos" });
+    if (!email || !password) return res.status(400).json({ ok: false, error: "faltan datos" });
     const user = await registerUser({ name, lastname, email, password });
-    req.session.userId = user.id;
-    req.session.userEmail = email;
-    res.status(201).json({ ok: true, user: { id: user.id, email } });
+    const session = req.session as SessionWithUser;
+    session.userId = user.id;
+    session.userEmail = email;
+    res.status(201).json({ ok: true, data: { id: user.id, email } });
   } catch (e: any) {
-    res.status(400).json({ error: e.message || "error en registro" });
+    res.status(400).json({ ok: false, error: e.message || "error en registro" });
   }
 });
 
@@ -200,9 +214,10 @@ app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await loginUser(email, password);
-    req.session.userId = user.id;
-    req.session.userEmail = user.email;
-    req.session.userRole = user.role;
+    const session = req.session as SessionWithUser;
+    session.userId = user.id;
+    session.userEmail = user.email;
+    session.userRole = user.role;
     
     // Redirigir según el rol del usuario
     let redirectUrl = "/";
@@ -216,7 +231,7 @@ app.post("/api/login", async (req, res) => {
     
     res.json({ ok: true, user, redirect: redirectUrl });
   } catch (e: any) {
-    res.status(401).json({ error: e.message || "credenciales invalidas" });
+    res.status(401).json({ ok: false, error: e.message || "credenciales invalidas" });
   }
 });
 
@@ -225,21 +240,23 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/session", (req, res) => {
-  if (req.session.userId)
+  const session = req.session as SessionWithUser;
+  if (session.userId) {
     return res.json({ 
       loggedIn: true, 
       user: { 
-        id: req.session.userId, 
-        email: req.session.userEmail,
-        role: req.session.userRole 
+        id: session.userId, 
+        email: session.userEmail,
+        role: session.userRole 
       } 
     });
+  }
   return res.json({ loggedIn: false });
 });
 
 app.post("/api/logout", (req, res) => {
   req.session.destroy(err => {
-    if (err) return res.status(500).json({ error: "no se pudo cerrar sesion" });
+    if (err) return res.status(500).json({ ok: false, error: "no se pudo cerrar sesion" });
     res.clearCookie("connect.sid");
     res.json({ ok: true });
   });
@@ -248,7 +265,7 @@ app.post("/api/logout", (req, res) => {
 app.post("/api/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
-    if (!email) return res.status(400).json({ error: "email requerido" });
+    if (!email) return res.status(400).json({ ok: false, error: "email requerido" });
     const result = await createPasswordReset(email);
     if (result) {
       const resetUrl = `${APP_BASE_URL}/api/reset-password/${result.token}`;
@@ -259,31 +276,53 @@ app.post("/api/forgot-password", async (req, res) => {
     }
     return res.json({ ok: true, message: "si el email existe se enviaron instrucciones" });
   } catch (e: any) {
-    return res.status(500).json({ error: e.message || "error al solicitar reseteo" });
+    return res.status(500).json({ ok: false, error: e.message || "error al solicitar reseteo" });
   }
 });
 
 app.get("/api/reset-password/:token", async (req, res) => {
   const token = req.params.token;
   const row = await validateResetToken(token);
-  if (!row) return res.status(400).json({ error: "token invalido o expirado" });
+  if (!row) return res.status(400).json({ ok: false, error: "token invalido o expirado" });
   return res.redirect(`/frontend/vistas/login/reset.html?token=${token}`);
 });
 
 app.post("/api/reset-password", async (req, res) => {
   try {
     const { token, password } = req.body;
-    if (!token || !password) return res.status(400).json({ error: "datos invalidos" });
+    if (!token || !password) return res.status(400).json({ ok: false, error: "datos invalidos" });
     await resetPassword(token, password);
     return res.json({ ok: true, message: "contrasena actualizada" });
   } catch (e: any) {
-    return res.status(400).json({ error: e.message || "no se pudo actualizar la contrasena" });
+    return res.status(400).json({ ok: false, error: e.message || "no se pudo actualizar la contrasena" });
   }
 });
 
+// Rutas de email (testing)
+app.get("/api/smtp-verify", async (_req, res) => {
+  const ok = await verifyMailer();
+  res.json({ ok });
+});
+
+app.post("/api/smtp-test", async (req, res) => {
+  const { to } = req.body || {};
+  if (!to) return res.status(400).json({ ok: false, error: "to requerido" });
+  const ok = await sendTestEmail(to);
+  res.json({ ok });
+});
+
+// Rutas de API (modulares)
+app.use("/api/products", productsRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/coupons", couponsRouter);
+app.use("/api/pets", petsRouter);
+app.use("/api/appointments", appointmentsRouter);
+
+// Redirects
 app.get("/frontend/vistas/register/index.html", (_req, res) => {
   res.redirect(301, "/frontend/vistas/register/register.html");
 });
+
 
 // Middleware para debug: mostrar todas las rutas registradas
 app.use((req, res, next) => {
@@ -318,7 +357,9 @@ initAuthSchema().then(() => {
     console.log(`  - GET  /api/compras`);
     console.log(`  - GET  /api/formularios`);
     console.log(`  - GET  /api-test (página de pruebas)`);
-    console.log(`  - GET  /debug-routes (debug: ver rutas registradas)\n`);
+    console.log(`  - GET  /debug-routes (debug: ver rutas registradas)`);
+    console.log(`📁 Frontend disponible en /frontend`);
+    console.log(`🔌 API disponible en /api\n`);
   });
 }).catch((error) => {
   console.error("❌ Error al iniciar el servidor:", error);

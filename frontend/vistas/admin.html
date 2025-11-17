@@ -3,14 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VetCare - Administrador</title>
+  <title>VetCarruseles - Administrador</title>
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="admin">
   <header>
     <nav>
-      <div class="logo"><i class="fa-solid fa-gear"></i> VetCare Admin</div>
+      <div class="logo">
+        <img src="/src/img/vete.jpg" alt="Logo Veterinaria Los Carruseles" class="logo-img">
+        VetCarruseles
+      </div>
+      <ul>
+      <li><a href="/frontend/vistas/admin.html">Admin</a></li>
+      <li><a href="/frontend/vistas/verUsuarios/GestionarUser.html">Usuarios</a></li>
+      <li><a href="/frontend/vistas/formulario/listadelosformularios.html">Solicitudes</a></li>
+      <li><a href="/frontend/vistas/Metricas/metricas.html">Metricas</a></li>    
+      <li><a href="/frontend/vistas/cupones/gestionCupones.html">Cupones</a></li>
+      </ul>
     </nav>
   </header>
 
@@ -26,11 +36,6 @@
       <a href="/frontend/vistas/verUsuarios/GestionarUser.html">
       <div class="card"><i class="fa-solid fa-user-gear"></i><h3>Gestionar usuarios</h3></div>
       </a>
-
-      <div class="card"><i class="fa-solid fa-box"></i><h3>Administrar productos</h3></div>
-     
-      <div class="card"><i class="fa-solid fa-paw"></i><h3>Controlar fichas de animales</h3></div>
-
       <a href="/frontend/vistas/cupones/gestionCupones.html">
       <div class="card"><i class="fa-solid fa-tags"></i><h3>Generar cupones</h3></div>
       </a>
@@ -45,8 +50,8 @@
   </section>
 
   <footer>
-    <p><i class="fa-solid fa-gear"></i> VetCare - Administrador</p>
-    <p class="copy">© 2025 VetCare - Todos los derechos reservados</p>
+    <p><i class="fa-solid fa-gear"></i> VetCarruseles - Administrador</p>
+    <p class="copy">© 2025 VetCarruseles - Todos los derechos reservados</p>
   </footer>
 </body>
 </html>
