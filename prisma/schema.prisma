@@ -27,8 +27,10 @@ model users {
   password_resets password_resets[]
 
   @@map("users")
+
 }
 
+// ============ FORMS ============
 model formulario {
   idformulario                    Int     @id @default(autoincrement())
   nombre                          String?
@@ -63,6 +65,7 @@ model formulario {
   @@map("formulario")
 }
 
+// ============ PRODUCTS ============
 model productos {
   idproducto Int     @id @default(autoincrement())
   nombre     String?
@@ -75,6 +78,7 @@ model productos {
   @@map("productos")
 }
 
+// ============ PURCHASES ============
 model compra {
   idcompra Int  @id @default(autoincrement())
   producto Int?
@@ -82,28 +86,34 @@ model compra {
   precio   Int?
 
   // relations
-  productoRef productos? @relation(fields: [producto], references: [idproducto])
+  productoRef productos? @relation(fields: [producto], references: [idproducto], onDelete: SetNull)
 
   @@map("compra")
 }
 
+// ============ ANIMALS ============
 model animal {
-  idanimal   Int      @id @default(autoincrement())
-  nombre     String?
-  edad       Int?
+  idanimal    Int      @id @default(autoincrement())
+  nombre      String?
+  edad        Int?
   descripcion String?
-  imagen_m   String?
-  dueno      Int?     @map("dueño")
+  imagen_m    String?
+  dueno       Int?     @map("dueño")
+  perfilId    Int?     // <-- FK al perfil
 
   // relations
-  duenoRef users? @relation("UserAnimales", fields: [dueno], references: [idusuario])
-  turnos    turno[]
-  perfiles  perfil[]
+
+  duenoRef    users?    @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
+  perfil      perfil?   @relation(fields: [perfilId], references: [idperfil], onDelete: SetNull)
+  turnos      turno[]
+
   historiales historial_medico[]
 
   @@map("animal")
 }
 
+
+// ============ APPOINTMENTS ============
 model turno {
   idturno Int    @id @default(autoincrement())
   mascota Int?
@@ -112,37 +122,40 @@ model turno {
   estado  String
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("turno")
 }
 
+// ============ PROFILES ============
 model perfil {
-  idperfil Int    @id @default(autoincrement())
-  nombre   String?
-  apellido String?
-  telefono Int?
-  mail     String?
-  mascota  Int?
+  idperfil   Int       @id @default(autoincrement())
+  nombre     String?
+  apellido   String?
+  telefono   Int?
+  mail       String?
 
   // relations
-  mascotaRef animal?     @relation(fields: [mascota], references: [idanimal])
+  mascotas   animal[]      // un perfil tiene varias mascotas
   consultas  consultas[]
 
   @@map("perfil")
 }
 
+
+// ============ CONSULTATIONS ============
 model consultas {
   idconsulta  Int     @id @default(autoincrement())
   nombre      Int?
   descripcion String?
 
   // relations
-  perfilRef perfil? @relation(fields: [nombre], references: [idperfil])
+  perfilRef perfil? @relation(fields: [nombre], references: [idperfil], onDelete: SetNull)
 
   @@map("consultas")
 }
 
+// ============ MEDICAL HISTORY ============
 model historial_medico {
   idhistorial    Int     @id @default(autoincrement())
   mascota        Int?
@@ -150,10 +163,11 @@ model historial_medico {
   vacunas        String?
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("historial_medico")
 }
+
 
 model password_resets {
   id                Int      @id @default(autoincrement())
@@ -196,3 +210,4 @@ model coupon {
 
   @@map("coupons")
 }
+

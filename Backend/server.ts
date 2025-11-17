@@ -1,9 +1,5 @@
-/**
- * Servidor principal - Solo lógica del servidor
- */
-
-import express from "express";
-import session from "express-session";
+import express, { Express, Request, Response } from "express";
+const session = require("express-session");
 import connectPgSimple from "connect-pg-simple";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -28,6 +24,7 @@ import appointmentsRouter from "./routes/appointments";
 
 dotenv.config();
 
+
 // Augment express-session types to include custom session properties
 declare module "express-session" {
   interface SessionData {
@@ -37,6 +34,7 @@ declare module "express-session" {
 }
 
 const app = express();
+
 
 const PORT = Number(process.env.PORT || 3001);
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev_secret";
@@ -54,6 +52,7 @@ app.use(
     store: new PgSession({
       conString: process.env.DATABASE_URL,
       tableName: "session",
+      createTableIfMissing: true,
     }),
     secret: SESSION_SECRET,
     resave: false,
@@ -87,8 +86,8 @@ app.post("/api/register", async (req, res) => {
     const { name, lastname, email, password } = req.body;
     if (!email || !password) return res.status(400).json({ ok: false, error: "faltan datos" });
     const user = await registerUser({ name, lastname, email, password });
-    req.session.userId = user.id;
-    req.session.userEmail = email;
+    (req.session as any).idusuario = user.id;
+    (req.session as any).userEmail = email;
     res.status(201).json({ ok: true, data: { id: user.id, email } });
   } catch (e: any) {
     res.status(400).json({ ok: false, error: e.message || "error en registro" });
@@ -99,8 +98,8 @@ app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await loginUser(email, password);
-    req.session.userId = user.id;
-    req.session.userEmail = user.email;
+    (req.session as any).userId = user.id;
+    (req.session as any).userEmail = user.email;
     res.json({ ok: true, data: user });
   } catch (e: any) {
     res.status(401).json({ ok: false, error: e.message || "credenciales invalidas" });
@@ -108,8 +107,9 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.get("/api/session", (req, res) => {
-  if (req.session.userId)
-    return res.json({ ok: true, data: { loggedIn: true, user: { id: req.session.userId, email: req.session.userEmail } } });
+  const session = req.session as any;
+  if (session.userId)
+    return res.json({ ok: true, data: { loggedIn: true, user: { id: session.userId, email: session.userEmail } } });
   return res.json({ ok: true, data: { loggedIn: false } });
 });
 

@@ -28,18 +28,19 @@ export async function registerUser(input: {
 }) {
   
   const { name, lastname, email, password } = input;
+
   
   // Verificar si el usuario ya existe
   const exists = await prisma.users.findUnique({
+
     where: { email },
   });
-  
-  if (exists) {
+
+  if (existing) {
     throw new Error("El email ya esta registrado");
   }
-  
+
   const hash = await bcrypt.hash(password, 10);
-  
   const user = await prisma.users.create({
     data: {
       name: name ?? null,
@@ -53,6 +54,10 @@ export async function registerUser(input: {
     },
   });
   
+      // role y created_at usan sus defaults
+  //  },
+  // });
+
   return { id: user.idusuario, email: user.email };
 }
 
@@ -62,13 +67,14 @@ export async function loginUser(email: string, password: string) {
   const user = await prisma.users.findUnique({
     where: { email },
   });
-  
+
   if (!user) {
     throw new Error("Credenciales invalidas");
   }
+
   
-  const ok = await bcrypt.compare(password, user.password_hash);
-  if (!ok) {
+  const isValid = await bcrypt.compare(password, user.password_hash);
+  if (!isValid) {
     throw new Error("Credenciales invalidas");
   }
   
@@ -77,6 +83,7 @@ export async function loginUser(email: string, password: string) {
     email: user.email,
     role: user.role,
   };
+
 }
 
 // ---------- CREAR TOKEN DE RESET ----------
@@ -85,22 +92,26 @@ export async function createPasswordReset(email: string) {
   const user = await prisma.users.findUnique({
     where: { email },
   });
-  
+
   if (!user) {
     return null;
   }
-  
+
   const token = crypto.randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
-  
+
+  const expirationDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+
+
   await prisma.password_resets.create({
     data: {
       user_id: user.idusuario,
       reset_token: token,
-      expiration_date: expiresAt,
+
+      expiration_date: expirationDate,
     },
   });
-  
+
+
   return { token, userId: user.idusuario };
 }
 
@@ -113,7 +124,10 @@ export async function validateResetToken(token: string) {
 
   if (!row) return null;
 
-  if (row.expiration_date && row.expiration_date < new Date()) return null;
+  if (row.expiration_date && row.expiration_date.getTime() < Date.now()) {
+    return null;
+  }
+
 
   return {
     id: row.id,
@@ -141,8 +155,11 @@ export async function resetPassword(token: string, newPassword: string) {
     data: { password_hash: hash },
   });
 
+
   // eliminar el token usado
   await prisma.password_resets.delete({ where: { id: row.id } });
 
+
   return true;
 }
+
