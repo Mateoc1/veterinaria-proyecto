@@ -6,10 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+model users {
 // ============ AUTHENTICATION ============
 model User {
   id           Int       @id @default(autoincrement())
@@ -93,44 +94,50 @@ model Product {
 // ============ LEGACY MODELS (mantener compatibilidad) ============
 model cliente {
   idusuario   Int      @id @default(autoincrement())
-  mail        String
-  contrasena  String   @map("contraseña")
+  name        String?
+  lastname    String?
+  email       String   @unique
+  password_hash String
+  role        String   @default("user")
+  created_at  DateTime @default(now())
 
   // relations
-  animales    animal[] @relation("ClienteAnimales")
+  animales    animal[] @relation("UserAnimales")
+  password_resets password_resets[]
 
-  @@map("cliente")
+  @@map("users")
 }
 
 model formulario {
-  idformulario               Int     @id @default(autoincrement())
-  nombre                     String?
-  apellido                   String?
-  telefono                   Int?
-  mail                       String?
-  fecha_nacimiento           String?
-  direccion                  String?
-  ciudad                     String?
-  provincia                  String?
-  codigo_postal              Int?
-  pais                       String?
-  tipo_documento             String?
-  numero_documento           Int?
-  tipo_vivienda              String
-  espacio_seguro             String
-  tiempo_solo                Int
-  personas_encasa            Int
-  familia_deacuerdo          String
-  otras_mascotas_anteriormente String
-  tipo                       String
-  otras_mascotas_actualmente Int
-  tipo_mascotas_actual       String
-  recursos                   String
-  vacunar_y_esterilizar      String
-  encargado_cuidado          String
-  sitio_animal_solo          String
-  rol_del_animal             String
-  estado                     String
+  idformulario                    Int     @id @default(autoincrement())
+  nombre                          String?
+  apellido                        String?
+  telefono                        Int?
+  mail                            String?
+  fecha_nacimiento                String?
+  direccion                       String?
+  ciudad                          String?
+  provincia                       String?
+  codigo_postal                   Int?
+  pais                            String?
+  tipo_documento                  String?
+  numero_documento                Int?
+  tipo_vivienda                   String
+  espacio_seguro                  String
+  tiempo_solo                     Int
+  personas_encasa                 Int
+  familia_deacuerdo               String
+  otras_mascotas_anteriormente    String
+  tipo                            String
+  eventos                         String
+  otras_mascotas_actualmente      Int
+  tipo_mascotas_actual            String
+  recursos                        String
+  vacunar_y_esterilizar           String
+  encargado_cuidado               String
+  sitio_animal_solo               String
+  rol_del_animal                  String
+  estado                          String
 
   @@map("formulario")
 }
@@ -168,7 +175,7 @@ model animal {
   dueno      Int?     @map("dueño")
 
   // relations
-  duenoRef cliente? @relation("ClienteAnimales", fields: [dueno], references: [idusuario])
+  duenoRef users? @relation("UserAnimales", fields: [dueno], references: [idusuario])
   turnos    turno[]
   perfiles  perfil[]
   historiales historial_medico[]
@@ -227,27 +234,14 @@ model historial_medico {
   @@map("historial_medico")
 }
 
-model User {
-  id           Int             @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String          @unique
-  passwordHash String          @map("password_hash")
-  role         String          @default("user")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  resets       PasswordReset[]
+model password_resets {
+  id                Int      @id @default(autoincrement())
+  user_id           Int
+  reset_token       String?
+  expiration_date   DateTime?
 
-  @@map("users")
-}
-
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-
-  user      User     @relation(fields: [userId], references: [id])
+  // relations
+  user              users    @relation(fields: [user_id], references: [idusuario])
 
   @@map("password_resets")
 }
