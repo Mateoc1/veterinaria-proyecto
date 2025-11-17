@@ -2,9 +2,9 @@
  * Página de Tienda - Lógica del cliente
  */
 
-import { Producto } from "../models/Producto";
-import { cartService } from "../services/cartService";
-import { couponService } from "../services/couponService";
+import { Producto } from "../models/Producto.js";
+import { cartService } from "../services/cartService.js";
+import { couponService } from "../services/couponService.js";
 
 function qs<T extends Element>(sel: string): T {
   const el = document.querySelector(sel);
@@ -31,7 +31,7 @@ function renderCarrito() {
   } else {
     carritoHTML.innerHTML = items
       .map(
-        (p) =>
+        (p: any) =>
           `<p>${p.nombre} x${p.cantidad} — $${p.precio * p.cantidad}</p>`
       )
       .join("");

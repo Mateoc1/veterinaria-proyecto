@@ -2,7 +2,7 @@
  * Modelo de Carrito
  */
 
-import { Producto } from "./Producto";
+import { Producto } from "./Producto.js";
 
 export class Carrito {
   private productos: Map<number, { producto: Producto; cantidad: number }> = new Map();
