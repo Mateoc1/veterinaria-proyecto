@@ -166,3 +166,33 @@ model password_resets {
 
   @@map("password_resets")
 }
+
+// ----- Modelos adicionales para compatibilidad con el backend -----
+model pet {
+  id        String  @id
+  nombre    String
+  especie   String
+  foto      String?
+  adoptable Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("pets")
+}
+
+model appointment {
+  id      String  @id
+  userId  Int?
+  petId   String?
+  motivo  String
+  fecha   DateTime @default(now())
+
+  @@map("appointments")
+}
+
+model coupon {
+  id     Int    @id @default(autoincrement())
+  code   String @unique
+  active Boolean @default(true)
+
+  @@map("coupons")
+}

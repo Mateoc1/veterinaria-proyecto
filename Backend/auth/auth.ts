@@ -26,10 +26,11 @@ export async function registerUser(input: {
   email: string;
   password: string;
 }) {
+  
   const { name, lastname, email, password } = input;
   
   // Verificar si el usuario ya existe
-  const exists = await prisma.user.findUnique({
+  const exists = await prisma.users.findUnique({
     where: { email },
   });
   
@@ -39,26 +40,26 @@ export async function registerUser(input: {
   
   const hash = await bcrypt.hash(password, 10);
   
-  const user = await prisma.user.create({
+  const user = await prisma.users.create({
     data: {
       name: name ?? null,
       lastname: lastname ?? null,
       email,
-      passwordHash: hash,
+      password_hash: hash,
     },
     select: {
-      id: true,
+      idusuario: true,
       email: true,
     },
   });
   
-  return { id: user.id, email: user.email };
+  return { id: user.idusuario, email: user.email };
 }
 
 // ---------- LOGIN ----------
 
 export async function loginUser(email: string, password: string) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { email },
   });
   
@@ -66,13 +67,13 @@ export async function loginUser(email: string, password: string) {
     throw new Error("Credenciales invalidas");
   }
   
-  const ok = await bcrypt.compare(password, user.passwordHash);
+  const ok = await bcrypt.compare(password, user.password_hash);
   if (!ok) {
     throw new Error("Credenciales invalidas");
   }
   
   return {
-    id: user.id,
+    id: user.idusuario,
     email: user.email,
     role: user.role,
   };
@@ -81,7 +82,7 @@ export async function loginUser(email: string, password: string) {
 // ---------- CREAR TOKEN DE RESET ----------
 
 export async function createPasswordReset(email: string) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: { email },
   });
   
@@ -92,63 +93,56 @@ export async function createPasswordReset(email: string) {
   const token = crypto.randomBytes(32).toString("hex");
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
   
-  await prisma.passwordReset.create({
+  await prisma.password_resets.create({
     data: {
-      userId: user.id,
-      token,
-      expiresAt,
+      user_id: user.idusuario,
+      reset_token: token,
+      expiration_date: expiresAt,
     },
   });
   
-  return { token, userId: user.id };
+  return { token, userId: user.idusuario };
 }
 
 // ---------- VALIDAR TOKEN ----------
 
 export async function validateResetToken(token: string) {
-  const row = await prisma.passwordReset.findUnique({
-    where: { token },
+  const row = await prisma.password_resets.findFirst({
+    where: { reset_token: token },
   });
-  
-  if (!row || row.used) {
-    return null;
-  }
-  
-  if (row.expiresAt < new Date()) {
-    return null;
-  }
-  
+
+  if (!row) return null;
+
+  if (row.expiration_date && row.expiration_date < new Date()) return null;
+
   return {
     id: row.id,
-    user_id: row.userId,
-    token: row.token,
+    user_id: row.user_id,
+    token: row.reset_token,
   };
 }
 
 // ---------- RESET PASSWORD ----------
 
 export async function resetPassword(token: string, newPassword: string) {
-  const row = await prisma.passwordReset.findUnique({
-    where: { token },
+  const row = await prisma.password_resets.findFirst({
+    where: { reset_token: token },
   });
 
-  if (!row || row.used || row.expiresAt.getTime() < Date.now()) {
+  if (!row || (row.expiration_date && row.expiration_date.getTime() < Date.now())) {
     throw new Error("Token invalido o expirado");
   }
 
   const hash = await bcrypt.hash(newPassword, 10);
 
   // actualizar contraseña del usuario
-  await prisma.user.update({
-    where: { id: row.userId },
-    data: { passwordHash: hash },
+  await prisma.users.update({
+    where: { idusuario: row.user_id },
+    data: { password_hash: hash },
   });
 
-  // marcar el token como usado
-  await prisma.passwordReset.update({
-    where: { id: row.id },
-    data: { used: true },
-  });
+  // eliminar el token usado
+  await prisma.password_resets.delete({ where: { id: row.id } });
 
   return true;
 }

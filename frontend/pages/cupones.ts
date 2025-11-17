@@ -2,7 +2,7 @@
  * Página de Gestión de Cupones - Lógica del cliente
  */
 
-import { couponService } from "../services/couponService";
+import { couponService } from "../services/couponService.js";
 
 function qs<T extends Element>(sel: string): T {
   const el = document.querySelector(sel);
