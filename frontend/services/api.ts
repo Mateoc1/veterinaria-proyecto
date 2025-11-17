@@ -30,28 +30,34 @@ class ApiClient {
         ...options,
         headers: {
           "Content-Type": "application/json",
-          ...options.headers,
+          ...((options as any).headers || {}),
         },
         credentials: "include",
       });
 
-      const data = await response.json();
+      // try parse JSON safely
+      let data: any = null;
+      try {
+        data = await response.json();
+      } catch (_) {
+        data = null;
+      }
 
       if (!response.ok) {
         return {
           ok: false,
-          error: data.error || data.message || "Error en la petición",
+          error: data?.error || data?.message || response.statusText || "Error en la petición",
         };
       }
 
       return {
         ok: true,
-        data: data.data || data,
+        data: (data && (data.data ?? data)) as T,
       };
     } catch (error: any) {
       return {
         ok: false,
-        error: error.message || "Error de conexión",
+        error: error?.message || "Error de conexión",
       };
     }
   }
@@ -218,6 +224,44 @@ class ApiClient {
   async getAppointments() {
     return this.request<any[]>("/api/appointments");
   }
+
+  // ============ FORMULARIO ============
+async createForm(data: {
+    nombre?: string;
+    apellido?: string;
+    telefono?: number;
+    mail?: string;
+    fecha_nacimiento?: string;
+    direccion?: string;
+    ciudad?: string;
+    provincia?: string;
+    codigo_postal?: number;
+    pais?: string;
+    tipo_documento?: string;
+    numero_documento?: number;
+    tipo_vivienda: string;
+    espacio_seguro: string;
+    tiempo_solo: number;
+    personas_encasa: number;
+    familia_deacuerdo: string;
+    otras_mascotas_anteriormente: string;
+    tipo: string;
+    eventos: string;
+    otras_mascotas_actualmente: number;
+    tipo_mascotas_actual: string;
+    recursos: string;
+    vacunar_y_esterilizar: string;
+    encargado_cuidado: string;
+    sitio_animal_solo: string;
+    rol_del_animal: string;
+    estado: string;
+  }) {
+    return this.request("/api/formulario", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
 }
 
 export const api = new ApiClient();

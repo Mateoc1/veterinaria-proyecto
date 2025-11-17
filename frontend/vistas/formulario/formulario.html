@@ -25,7 +25,37 @@
     <section class="form-adopcion">
       <h2>Formulario de Adopción</h2>
 
-      <form action="procesar.php" method="POST" class="adopt-form">
+  <form action="/api/formularios" method="POST" id="adopcionForm">
+        
+
+  <h3>Datos del Solicitante</h3>
+  <label>Nombre Completo</label>
+  <input type="text" name="nombre_completo" maxlength="50" required>
+  <label>Telefono</label>
+  <input type="tel" name="telefono" maxlength="15" required>
+  <label>Correo Electrónico</label>
+  <input type="email" name="email" maxlength="50" required>
+  <label>Fecha de nacimiento</label>
+  <input type="date" name="fecha_nacimiento" required>
+  <label>Dirección</label>
+  <input type="text" name="direccion" maxlength="100" required>
+  <label>Ciudad</label>
+  <input type="text" name="ciudad" maxlength="50" required>
+  <label>Provincia </label>
+  <input type="text" name="provincia" maxlength="50" required>
+  <label>Código Postal </label>  
+  <input type="text" name="codigo_postal" maxlength="10" required>
+  <label>País</label>
+  <input type="text" name="pais" maxlength="50" required>
+  <label>Tipo de documento></label>
+  <select name="tipo_documento" required>
+    <option value="">Seleccionar</option>
+    <option value="dni">DNI</option>
+    <option value="pasaporte">Pasaporte</option>
+    <option value="otro">Otro</option>
+  </select>
+  <label>Número de documento</label>
+  <input type="text" name="numero_documento" maxlength="20" required>
 
   <h3>Información del hogar</h3>
 
@@ -114,6 +144,6 @@
 </form>
     </section>
   </main>
-<script type="module" src="/Backend/routes/formulario.js"></script>
+<script type="module" src="/Backend/routes/formularios.ts"></script>
 </body>
 </html>
