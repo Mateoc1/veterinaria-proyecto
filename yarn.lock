@@ -1260,6 +1260,13 @@ confbox@^0.2.2:
   resolved "https://registry.npmjs.org/confbox/-/confbox-0.2.2.tgz"
   integrity sha512-1NB+BKqhtNipMsov4xI/NnhCKp9XG9NamYp5PVm9klAT0fsrNPjaFICsCFhNhwZJKNh7zB/3q8qXz0E9oaMNtQ==
 
+connect-pg-simple@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/connect-pg-simple/-/connect-pg-simple-10.0.0.tgz"
+  integrity sha512-pBGVazlqiMrackzCr0eKhn4LO5trJXsOX0nQoey9wCOayh80MYtThCbq8eoLsjpiWgiok/h+1/uti9/2/Una8A==
+  dependencies:
+    pg "^8.12.0"
+
 connect-pg-simple@^9.0.1:
   version "9.0.1"
   resolved "https://registry.npmjs.org/connect-pg-simple/-/connect-pg-simple-9.0.1.tgz"
@@ -1888,7 +1895,7 @@ pg-types@2.2.0:
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
 
-pg@^8.13.1, pg@^8.8.0, pg@>=8.0:
+pg@^8.12.0, pg@^8.13.1, pg@^8.8.0, pg@>=8.0:
   version "8.16.3"
   resolved "https://registry.npmjs.org/pg/-/pg-8.16.3.tgz"
   integrity sha512-enxc1h0jA/aq5oSDMvqyW3q89ra6XIIDZgCX9vkMrnz5DFTw/Ny3Li2lFQ+pt3L6MCgm/5o2o8HW9hiJji+xvw==
@@ -2282,7 +2289,7 @@ vary@^1, vary@^1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-"veterinaria-backend@file:C:\\Users\\pc3\\Desktop\\laburo claudio\\repositorio global\\veterinaria-proyecto\\Backend":
+"veterinaria-backend@file:C:\\Users\\usuario\\Desktop\\proyectos mitingay\\veterinaria\\veterinaria-proyecto\\Backend":
   version "1.0.0"
   resolved "file:Backend"
   dependencies:
@@ -2296,7 +2303,7 @@ vary@^1, vary@^1.1.2:
     nodemailer "^7.0.10"
     pg "^8.13.1"
 
-"veterinaria-frontend@file:C:\\Users\\pc3\\Desktop\\laburo claudio\\repositorio global\\veterinaria-proyecto\\frontend":
+"veterinaria-frontend@file:C:\\Users\\usuario\\Desktop\\proyectos mitingay\\veterinaria\\veterinaria-proyecto\\frontend":
   version "1.0.0"
   resolved "file:frontend"
 

@@ -10,89 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============ USERS / AUTHENTICATION ============
 model users {
-// ============ AUTHENTICATION ============
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  role         String    @default("user")
-  createdAt    DateTime  @default(now()) @map("created_at")
-
-  passwordResets PasswordReset[]
-  appointments   Appointment[]
-
-  @@map("users")
-}
-
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_resets")
-}
-
-// ============ PETS / ADOPTIONS ============
-model Pet {
-  id         String       @id
-  nombre     String
-  especie    String
-  foto       String?
-  adoptable  Boolean      @default(false)
-  createdAt  DateTime     @default(now()) @map("created_at")
-
-  appointments Appointment[]
-
-  @@map("pets")
-}
-
-// ============ APPOINTMENTS ============
-model Appointment {
-  id        String   @id
-  userId    Int?     @map("user_id")
-  petId     String   @map("pet_id")
-  motivo    String
-  fecha     DateTime @default(now())
-  estado    String   @default("pendiente")
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  pet  Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
-
-  @@map("appointments")
-}
-
-// ============ COUPONS ============
-model Coupon {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("coupons")
-}
-
-// ============ PRODUCTS ============
-model Product {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  precio    Float
-  stock     Int      @default(0)
-  urlImagen String?  @map("url_imagen")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("products")
-}
-
-// ============ LEGACY MODELS (mantener compatibilidad) ============
-model cliente {
   idusuario   Int      @id @default(autoincrement())
   name        String?
   lastname    String?
@@ -108,6 +27,19 @@ model cliente {
   @@map("users")
 }
 
+model password_resets {
+  id                Int      @id @default(autoincrement())
+  user_id           Int
+  reset_token       String?
+  expiration_date   DateTime?
+
+  // relations
+  user              users    @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
+
+  @@map("password_resets")
+}
+
+// ============ FORMS ============
 model formulario {
   idformulario                    Int     @id @default(autoincrement())
   nombre                          String?
@@ -142,6 +74,7 @@ model formulario {
   @@map("formulario")
 }
 
+// ============ PRODUCTS ============
 model productos {
   idproducto Int     @id @default(autoincrement())
   nombre     String?
@@ -154,6 +87,7 @@ model productos {
   @@map("productos")
 }
 
+// ============ PURCHASES ============
 model compra {
   idcompra Int  @id @default(autoincrement())
   producto Int?
@@ -161,11 +95,12 @@ model compra {
   precio   Int?
 
   // relations
-  productoRef productos? @relation(fields: [producto], references: [idproducto])
+  productoRef productos? @relation(fields: [producto], references: [idproducto], onDelete: SetNull)
 
   @@map("compra")
 }
 
+// ============ ANIMALS ============
 model animal {
   idanimal   Int      @id @default(autoincrement())
   nombre     String?
@@ -175,7 +110,7 @@ model animal {
   dueno      Int?     @map("dueño")
 
   // relations
-  duenoRef users? @relation("UserAnimales", fields: [dueno], references: [idusuario])
+  duenoRef users? @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
   turnos    turno[]
   perfiles  perfil[]
   historiales historial_medico[]
@@ -183,6 +118,7 @@ model animal {
   @@map("animal")
 }
 
+// ============ APPOINTMENTS ============
 model turno {
   idturno Int    @id @default(autoincrement())
   mascota Int?
@@ -191,11 +127,12 @@ model turno {
   estado  String
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("turno")
 }
 
+// ============ PROFILES ============
 model perfil {
   idperfil Int    @id @default(autoincrement())
   nombre   String?
@@ -205,23 +142,25 @@ model perfil {
   mascota  Int?
 
   // relations
-  mascotaRef animal?     @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal?     @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
   consultas  consultas[]
 
   @@map("perfil")
 }
 
+// ============ CONSULTATIONS ============
 model consultas {
   idconsulta  Int     @id @default(autoincrement())
   nombre      Int?
   descripcion String?
 
   // relations
-  perfilRef perfil? @relation(fields: [nombre], references: [idperfil])
+  perfilRef perfil? @relation(fields: [nombre], references: [idperfil], onDelete: SetNull)
 
   @@map("consultas")
 }
 
+// ============ MEDICAL HISTORY ============
 model historial_medico {
   idhistorial    Int     @id @default(autoincrement())
   mascota        Int?
@@ -229,19 +168,7 @@ model historial_medico {
   vacunas        String?
 
   // relations
-  mascotaRef animal? @relation(fields: [mascota], references: [idanimal])
+  mascotaRef animal? @relation(fields: [mascota], references: [idanimal], onDelete: SetNull)
 
   @@map("historial_medico")
-}
-
-model password_resets {
-  id                Int      @id @default(autoincrement())
-  user_id           Int
-  reset_token       String?
-  expiration_date   DateTime?
-
-  // relations
-  user              users    @relation(fields: [user_id], references: [idusuario])
-
-  @@map("password_resets")
 }

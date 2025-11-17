@@ -19,6 +19,8 @@
     "frontend"
   ],
   "dependencies": {
-    "@prisma/client": "^6.19.0"
+    "@prisma/client": "^6.19.0",
+    "connect-pg-simple": "^10.0.0",
+    "express-session": "^1.18.2"
   }
 }
