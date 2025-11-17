@@ -1,0 +1,32 @@
+button {
+  background-color: #00B8D9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  background-color: #66D9EF;
+}
+
+a {
+  text-align: center;
+  color: #E0F7FA;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}

@@ -1,54 +1,73 @@
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: #f4f9fc;
-  color: white;
+/* ===== PALETA GENERAL ===== */
+:root {
+  --fondo: #F4F6FF;        /* fondo azul muy clarito */
+  --texto: #1E1E1E;
+  --encabezado: #283593;   /* azul oscuro elegante */
+  --acento: #5865F2;       /* AZUL FACHERO (Discord-ish) */
+  --hover: #7F8BFF;        /* azul claro para hover */
+  --iconos: #E7E9FF;       /* azul pastel */
+  --elemento-neutro: #DCE1F7;
+}
+
+/* ===== RESETEO ===== */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* ===== NAVBAR ===== */
 header {
-  background: #6063FF;
-  width: 100%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   position: sticky;
   top: 0;
   z-index: 100;
-  margin-bottom: 40px;
+  width: 100%;
 }
 
 nav {
   max-width: 1200px;
   margin: auto;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: var(--encabezado);
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .logo i {
   color: var(--acento);
-  margin-right: 8px;
 }
 
 nav ul {
   display: flex;
-  list-style: none;
   gap: 1.5rem;
+  list-style: none;
 }
 
 nav a {
   text-decoration: none;
   color: var(--texto);
   font-weight: 500;
-  transition: color 0.3s;
+  transition: 0.3s ease;
 }
 
 nav a:hover {
@@ -59,6 +78,11 @@ h1 {
   color: #6063FF;
   text-align: center;
   margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+h3 {
+  margin-bottom: 20px;
 }
 
 table {
@@ -118,4 +142,5 @@ form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 2rem;
 }
