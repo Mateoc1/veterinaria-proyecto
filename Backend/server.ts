@@ -22,6 +22,7 @@ import couponsRouter from "./routes/coupons";
 import petsRouter from "./routes/pets";
 import appointmentsRouter from "./routes/appointments";
 import paymentsRouter from "./routes/payments";
+import formulariosRouter from "./routes/formularios";
 
 dotenv.config();
 
@@ -101,6 +102,8 @@ app.post("/api/login", async (req, res) => {
     const user = await loginUser(email, password);
     (req.session as any).userId = user.id;
     (req.session as any).userEmail = user.email;
+    // store role in session for later authorization checks
+    (req.session as any).userRole = user.role;
     res.json({ ok: true, data: user });
   } catch (e: any) {
     res.status(401).json({ ok: false, error: e.message || "credenciales invalidas" });
@@ -128,8 +131,10 @@ app.post("/api/forgot-password", async (req, res) => {
     if (!email) return res.status(400).json({ ok: false, error: "email requerido" });
     const result = await createPasswordReset(email);
     if (result) {
-      const resetUrl = `${APP_BASE_URL}/api/reset-password/${result.token}`;
-      const sent = await sendPasswordResetEmail(email, resetUrl);
+      // Send direct link to frontend reset page with token as query param
+      const base = APP_BASE_URL.replace(/\/$/, "");
+      const resetUrl = `${base}/frontend/vistas/login/reset.html?token=${result.token}`;
+      const sent = await sendPasswordResetEmail(email, result.token, resetUrl);
       console.log("forgot sent:", sent);
     } else {
       console.log("forgot user not found");
@@ -158,6 +163,8 @@ app.post("/api/reset-password", async (req, res) => {
   }
 });
 
+
+
 // Rutas de email (testing)
 app.get("/api/smtp-verify", async (_req, res) => {
   const ok = await verifyMailer();
@@ -178,6 +185,7 @@ app.use("/api/coupons", couponsRouter);
 app.use("/api/pets", petsRouter);
 app.use("/api/appointments", appointmentsRouter);
 app.use("/api/payments", paymentsRouter);
+app.use("/api/formularios", formulariosRouter);
 
 // Redirects
 app.get("/frontend/vistas/register/index.html", (_req, res) => {

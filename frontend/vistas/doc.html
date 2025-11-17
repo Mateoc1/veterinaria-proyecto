@@ -19,6 +19,7 @@
         <li><a href="https://wa.me">Consultas</a></li>
         <li><a href="../vistas/verUsuarios/verusuario.html">Pacientes</a></li>
         <li><a href="/frontend/vistas/Verhistorial/Acthistorial.html">Historial</a></li>
+        <li><a href="#" id="logoutBtn">Cerrar sesión</a></li>
       </ul>
     </nav>
   </header>
@@ -53,5 +54,12 @@
     <p><i class="fa-solid fa-stethoscope"></i> VetCarruseles - Doctor</p>
     <p class="copy">© 2025 VetCarruseles - Todos los derechos reservados</p>
   </footer>
+  <script>
+    document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try { await fetch('/api/logout', { method: 'POST', credentials: 'include' }); } catch(_){}
+      window.location.href = '/frontend/vistas/login/login.html';
+    });
+  </script>
 </body>
 </html>

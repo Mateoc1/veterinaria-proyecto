@@ -31,7 +31,11 @@
 
   <script>
     const API = "http://localhost:3001";
-    const TARGET = "/frontend/vistas/index.html";
+    const TARGETS = {
+      user: "/frontend/vistas/index.html",
+      admin: "/frontend/vistas/admin.html",
+      doctor: "/frontend/vistas/doc.html",
+    };
 
     // LOGIN
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
@@ -49,7 +53,10 @@
       const data = await res.json();
 
       if(data.ok){
-        window.location.href = TARGET;
+        // prefer role-based redirect; fallback to user home
+        const role = data.data?.role || 'user';
+        const target = TARGETS[role] || TARGETS.user;
+        window.location.href = target;
       } else {
         document.getElementById("msg").textContent = data.error || "Credenciales invalidas";
       }

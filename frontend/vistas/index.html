@@ -23,6 +23,7 @@
         <li><a href="/src/adopciones/pagina-adopcion.html">Adopciones</a></li>
         <li><a href="/frontend/vistas/tienda/tienda.html">Tienda</a></li>
         <li><a href="/frontend/vistas/agregarMascota/mascota.html">Mis Mascotas</a></li>
+        <li><a href="#" id="logoutBtn">Cerrar sesión</a></li>
       </ul>
     </nav>
   </header>
@@ -62,6 +63,18 @@
     <p><i class="fa-solid fa-paw"></i> VetCarruseles - Usuario</p>
     <p class="copy">© 2025 VetCarruseles - Todos los derechos reservados</p>
   </footer>
+  <script>
+    // Logout button handler: call backend logout and redirect to login
+    document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      } catch (err) {
+        // ignore errors
+      }
+      window.location.href = '/frontend/vistas/login/login.html';
+    });
+  </script>
 </body>
 
 </html>
