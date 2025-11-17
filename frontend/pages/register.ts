@@ -2,7 +2,7 @@
  * Página de Registro - Lógica del cliente
  */
 
-import { api } from "../services/api";
+import { api } from "../services/api.js";
 
 function qs<T extends Element>(sel: string): T {
   const el = document.querySelector(sel);

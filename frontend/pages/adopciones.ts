@@ -2,7 +2,7 @@
  * Página de Adopciones - Lógica del cliente
  */
 
-import { api } from "../services/api";
+import { api } from "../services/api.js";
 
 interface Mascota {
   id: string;

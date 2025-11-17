@@ -2,9 +2,9 @@
  * Página de Pago - Lógica del cliente
  */
 
-import { cartService } from "../services/cartService";
-import { couponService } from "../services/couponService";
-import { api } from "../services/api";
+import { cartService } from "../services/cartService.js";
+import { couponService } from "../services/couponService.js";
+import { api } from "../services/api.js";
 
 function qs<T extends Element>(sel: string): T {
   const el = document.querySelector(sel);

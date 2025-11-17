@@ -38,8 +38,9 @@
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-
-      const res = await fetch(API + "/api/login", {
+      const body = { email, password };
+      console.log("Enviando datos de login:", body);
+      const res = await fetch(`${API}/api/login`, { 
         method: "POST",
         headers: {"Content-Type":"application/json"},
         credentials: "include",

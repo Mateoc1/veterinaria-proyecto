@@ -23,7 +23,18 @@ import petsRouter from "./routes/pets";
 import appointmentsRouter from "./routes/appointments";
 
 dotenv.config();
-const app: Express = express();
+
+
+// Augment express-session types to include custom session properties
+declare module "express-session" {
+  interface SessionData {
+    userId?: number;
+    userEmail?: string;
+  }
+}
+
+const app = express();
+
 
 const PORT = Number(process.env.PORT || 3001);
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev_secret";
@@ -50,13 +61,18 @@ app.use(
   })
 );
 
-// Servir archivos estáticos del frontend (HTML, CSS, etc.)
+// Servir archivos JavaScript compilados del frontend (producción / build)
+const FRONT_DIST_DIR = path.resolve(__dirname, "../dist/frontend");
+app.use("/frontend", express.static(FRONT_DIST_DIR));
+
+// Servir archivos fuente del frontend (desarrollo) como fallback
 const FRONT_DIR = path.resolve(__dirname, "../frontend");
 app.use("/frontend", express.static(FRONT_DIR));
 
-// Servir archivos JavaScript compilados del frontend
-const FRONT_DIST_DIR = path.resolve(__dirname, "../dist/frontend");
-app.use("/frontend", express.static(FRONT_DIST_DIR));
+// Nota: servir primero la carpeta compilada evita que archivos .ts sin compilar
+// (extensión .ts) sean servidos directamente al navegador (que los interpreta
+// como video 'video/mp2t'). Si prefieres servir siempre la carpeta fuente en
+// desarrollo, ajusta el orden o usa un flag de entorno.
 
 // Rutas principales
 app.get("/", (_req, res) => res.redirect("/frontend/vistas/login/login.html"));

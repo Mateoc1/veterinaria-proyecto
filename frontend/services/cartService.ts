@@ -3,8 +3,8 @@
  * Maneja la lógica del carrito en el frontend
  */
 
-import { Producto } from "../models/Producto";
-import { Carrito } from "../models/Carrito";
+import { Producto } from "../models/Producto.js";
+import { Carrito } from "../models/Carrito.js";
 
 class CartService {
   private cart: Carrito;

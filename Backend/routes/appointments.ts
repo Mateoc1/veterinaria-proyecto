@@ -15,15 +15,16 @@ router.get("/", async (req: Request, res) => {
     const appointments = await prisma.appointment.findMany({
       where: userId ? { userId } : undefined,
       orderBy: { fecha: "desc" },
-      include: {
-        pet: {
+      /*include: {
+        
+       /* pet: {
           select: {
             id: true,
             nombre: true,
             especie: true,
           },
         },
-      },
+      },*/
     });
 
     res.json({ ok: true, data: appointments });
@@ -50,14 +51,6 @@ router.post("/", async (req: Request, res) => {
         userId,
         petId,
         motivo: motivo.trim(),
-      },
-      include: {
-        pet: {
-          select: {
-            id: true,
-            nombre: true,
-          },
-        },
       },
     });
 

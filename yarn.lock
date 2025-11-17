@@ -3305,7 +3305,22 @@ vary@^1, vary@^1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-"veterinaria-frontend@file:C:\\Users\\Segundo Enriquez\\Documents\\mitin\\veterinaria-proyecto\\frontend":
+"veterinaria-backend@file:C:\\Users\\Usuario\\Desktop\\mitingay\\veterinaria-proyecto\\Backend":
+  version "1.0.0"
+  resolved "file:Backend"
+  dependencies:
+    "@prisma/client" "^6.19.0"
+    bcrypt "^6.0.0"
+    connect-pg-simple "^9.0.1"
+    cors "^2.8.5"
+    dotenv "^17.2.3"
+    express "^5.1.0"
+    express-session "^1.18.2"
+    nodemailer "^7.0.10"
+    pg "^8.13.1"
+
+"veterinaria-frontend@file:C:\\Users\\Usuario\\Desktop\\mitingay\\veterinaria-proyecto\\frontend":
+
   version "1.0.0"
   resolved "file:frontend"
 

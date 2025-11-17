@@ -3,7 +3,7 @@
  * Maneja la lógica de cupones en el frontend
  */
 
-import { api } from "./api";
+import { api } from "./api.js";
 
 class CouponService {
   private appliedCoupon: string | null = null;

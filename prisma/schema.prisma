@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============ USERS / AUTHENTICATION ============
 model users {
   idusuario   Int      @id @default(autoincrement())
   name        String?
@@ -25,18 +27,7 @@ model users {
   password_resets password_resets[]
 
   @@map("users")
-}
 
-model password_resets {
-  id                Int      @id @default(autoincrement())
-  user_id           Int
-  reset_token       String?
-  expiration_date   DateTime?
-
-  // relations
-  user              users    @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
-
-  @@map("password_resets")
 }
 
 // ============ FORMS ============
@@ -111,9 +102,11 @@ model animal {
   perfilId    Int?     // <-- FK al perfil
 
   // relations
+
   duenoRef    users?    @relation("UserAnimales", fields: [dueno], references: [idusuario], onDelete: SetNull)
   perfil      perfil?   @relation(fields: [perfilId], references: [idperfil], onDelete: SetNull)
   turnos      turno[]
+
   historiales historial_medico[]
 
   @@map("animal")
@@ -174,3 +167,47 @@ model historial_medico {
 
   @@map("historial_medico")
 }
+
+
+model password_resets {
+  id                Int      @id @default(autoincrement())
+  user_id           Int
+  reset_token       String?
+  expiration_date   DateTime?
+
+  // relations
+  user              users    @relation(fields: [user_id], references: [idusuario])
+
+  @@map("password_resets")
+}
+
+// ----- Modelos adicionales para compatibilidad con el backend -----
+model pet {
+  id        String  @id
+  nombre    String
+  especie   String
+  foto      String?
+  adoptable Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("pets")
+}
+
+model appointment {
+  id      String  @id
+  userId  Int?
+  petId   String?
+  motivo  String
+  fecha   DateTime @default(now())
+
+  @@map("appointments")
+}
+
+model coupon {
+  id     Int    @id @default(autoincrement())
+  code   String @unique
+  active Boolean @default(true)
+
+  @@map("coupons")
+}
+
