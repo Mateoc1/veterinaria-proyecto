@@ -196,6 +196,9 @@ app.get("/tienda",(_req, res) => {
 
 
 
+
+
+
 app.get("/api-test", (_req, res) => {
   res.sendFile(path.join(FRONT_DIR, "api-test.html"));
 });

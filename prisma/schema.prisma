@@ -37,7 +37,36 @@ model password_resets {
   user              users    @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
 
   @@map("password_resets")
-// (Fin del schema)
+}
+
+// ============ FORMS ============
+model formulario {
+  idformulario                    Int     @id @default(autoincrement())
+  nombre                          String?
+  apellido                        String?
+  telefono                        Int?
+  mail                            String?
+  fecha_nacimiento                String?
+  direccion                       String?
+  ciudad                          String?
+  provincia                       String?
+  codigo_postal                   Int?
+  pais                            String?
+  tipo_documento                  String?
+  numero_documento                Int?
+  tipo_vivienda                   String
+  espacio_seguro                  String
+  tiempo_solo                     Int
+  personas_encasa                 Int
+  familia_deacuerdo               String
+  otras_mascotas_anteriormente    String
+  tipo                            String
+  eventos                         String
+  otras_mascotas_actualmente      Int
+  tipo_mascotas_actual            String
+  recursos                        String
+  vacunar_y_esterilizar           String
+  encargado_cuidado               String
   sitio_animal_solo               String
   rol_del_animal                  String
   estado                          String
@@ -145,32 +174,3 @@ model historial_medico {
 
   @@map("historial_medico")
 }
-<<<<<<< HEAD
-
-/*model User {
-  id           Int             @id @default(autoincrement())
-  name         String?
-  lastname     String?
-  email        String          @unique
-  passwordHash String          @map("password_hash")
-  role         String          @default("user")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  resets       PasswordReset[]
-
-  @@map("users")
-}
-
-model PasswordReset {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  token     String   @unique
-  expiresAt DateTime @map("expires_at")
-  used      Boolean  @default(false)
-
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@map("password_resets")
-}
-*/
-=======
->>>>>>> 6203609390c3c685550f841f6c7632b2926d5910

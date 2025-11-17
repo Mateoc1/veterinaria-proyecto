@@ -82,7 +82,7 @@
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({email})
       });
-
+      
       await res.json();
       alert("Si existe una cuenta con ese email, se envio el link de recuperacion.");
     });
