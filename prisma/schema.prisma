@@ -27,6 +27,8 @@ model users {
   // relations
   animales        animal[]          @relation("UserAnimales")
   password_resets password_resets[]
+  cart_items  cart_item[]
+  orders      order[]
 
   @@map("users")
 }
@@ -94,9 +96,12 @@ model productos {
   nombre     String?
   url_imagen String?
   stock      Int
+  precio     Float   @default(0)
 
   // relations
   compras    compra[]
+  cart_items cart_item[]
+  order_items order_item[]
 
   @@map("productos")
 }
@@ -233,4 +238,46 @@ model coupon {
   active Boolean @default(true)
 
   @@map("coupons")
+}
+model cart_item {
+  id         Int @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  quantity   Int @default(1)
+  created_at DateTime @default(now())
+
+  user       users     @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
+  product    productos @relation(fields: [product_id], references: [idproducto], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@map("cart_items")
+}
+
+model order {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  total_amount    Float
+  status          String   @default("pending")
+  payment_id      String?
+  payment_status  String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  user            users       @relation(fields: [user_id], references: [idusuario], onDelete: Cascade)
+  order_items     order_item[]
+
+  @@map("orders")
+}
+
+model order_item {
+  id         Int   @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int
+  price      Float
+
+  order      order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    productos @relation(fields: [product_id], references: [idproducto], onDelete: Cascade)
+
+  @@map("order_items")
 }

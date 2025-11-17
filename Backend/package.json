@@ -20,6 +20,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
+    "mercadopago": "^2.0.15",
     "nodemailer": "^7.0.10",
     "pg": "^8.13.1"
   },
