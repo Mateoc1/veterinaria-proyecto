@@ -36,7 +36,7 @@ export async function registerUser(input: {
     where: { email },
   });
 
-  if (existing) {
+  if (exists) {
     throw new Error("El email ya esta registrado");
   }
 
