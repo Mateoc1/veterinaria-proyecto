@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Tester - Endpoints</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    .endpoint-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border-left: 4px solid #4CAF50;
+    }
+    .endpoint-section h2 {
+      color: #4CAF50;
+      margin-bottom: 15px;
+      font-size: 1.4em;
+    }
+    .endpoint {
+      margin: 15px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    .method {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.85em;
+      margin-right: 10px;
+    }
+    .method.get { background: #4CAF50; color: white; }
+    .method.post { background: #2196F3; color: white; }
+    .method.put { background: #FF9800; color: white; }
+    .method.delete { background: #f44336; color: white; }
+    .url {
+      font-family: 'Courier New', monospace;
+      color: #666;
+      font-size: 0.95em;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .response {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+    }
+    .response.show {
+      display: block;
+    }
+    .response.success {
+      border-left: 4px solid #4CAF50;
+    }
+    .response.error {
+      border-left: 4px solid #f44336;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    textarea {
+      min-height: 80px;
+      font-family: 'Courier New', monospace;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #555;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 API Tester - Endpoints Disponibles</h1>
+    <p style="margin-bottom: 30px; color: #666;">Base URL: <strong>http://localhost:3001</strong></p>
+
+    <!-- Health Check -->
+    <div class="endpoint-section">
+      <h2>🔍 Health Check</h2>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/health</span>
+        <button onclick="testEndpoint('GET', '/api/health')">Probar</button>
+        <div class="response" id="response-health"></div>
+      </div>
+    </div>
+
+    <!-- Productos -->
+    <div class="endpoint-section">
+      <h2>📦 Productos</h2>
+      
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/productos</span>
+        <button onclick="testEndpoint('GET', '/api/productos')">Listar todos</button>
+        <div class="response" id="response-productos-get"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/productos/:id</span>
+        <label>ID del producto:</label>
+        <input type="number" id="producto-id" placeholder="1">
+        <button onclick="testEndpoint('GET', `/api/productos/${document.getElementById('producto-id').value}`)">Obtener por ID</button>
+        <div class="response" id="response-productos-get-id"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/api/productos</span>
+        <label>Nombre:</label>
+        <input type="text" id="producto-nombre" placeholder="Alimento Premium">
+        <label>Stock:</label>
+        <input type="number" id="producto-stock" placeholder="100">
+        <label>URL Imagen (opcional):</label>
+        <input type="text" id="producto-imagen" placeholder="https://...">
+        <button onclick="testProductoPost()">Crear producto</button>
+        <div class="response" id="response-productos-post"></div>
+      </div>
+    </div>
+
+    <!-- Animales -->
+    <div class="endpoint-section">
+      <h2>🐾 Animales / Adopciones</h2>
+      
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/animales</span>
+        <button onclick="testEndpoint('GET', '/api/animales')">Listar todos</button>
+        <div class="response" id="response-animales-get"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/animales/adoptables</span>
+        <button onclick="testEndpoint('GET', '/api/animales/adoptables')">Listar adoptables</button>
+        <div class="response" id="response-animales-adoptables"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/api/animales</span>
+        <label>Nombre:</label>
+        <input type="text" id="animal-nombre" placeholder="Luna">
+        <label>Especie/Edad:</label>
+        <input type="text" id="animal-edad" placeholder="2">
+        <label>Descripción:</label>
+        <textarea id="animal-descripcion" placeholder="Animal muy cariñoso..."></textarea>
+        <label>URL Imagen (opcional):</label>
+        <input type="text" id="animal-imagen" placeholder="https://...">
+        <button onclick="testAnimalPost()">Crear animal</button>
+        <div class="response" id="response-animales-post"></div>
+      </div>
+    </div>
+
+    <!-- Turnos -->
+    <div class="endpoint-section">
+      <h2>📅 Turnos / Citas</h2>
+      
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/turnos</span>
+        <button onclick="testEndpoint('GET', '/api/turnos')">Listar todos</button>
+        <div class="response" id="response-turnos-get"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/api/turnos</span>
+        <label>ID Mascota:</label>
+        <input type="number" id="turno-mascota" placeholder="1">
+        <label>Motivo:</label>
+        <textarea id="turno-motivo" placeholder="Consulta general"></textarea>
+        <label>Fecha (opcional):</label>
+        <input type="text" id="turno-fecha" placeholder="2024-01-15">
+        <label>Estado:</label>
+        <input type="text" id="turno-estado" placeholder="pendiente" value="pendiente">
+        <button onclick="testTurnoPost()">Crear turno</button>
+        <div class="response" id="response-turnos-post"></div>
+      </div>
+    </div>
+
+    <!-- Compras -->
+    <div class="endpoint-section">
+      <h2>🛒 Compras</h2>
+      
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/compras</span>
+        <button onclick="testEndpoint('GET', '/api/compras')">Listar todas</button>
+        <div class="response" id="response-compras-get"></div>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/api/compras</span>
+        <label>ID Producto:</label>
+        <input type="number" id="compra-producto" placeholder="1">
+        <label>Unidades:</label>
+        <input type="number" id="compra-unidades" placeholder="2">
+        <label>Precio:</label>
+        <input type="number" id="compra-precio" placeholder="5000">
+        <button onclick="testCompraPost()">Crear compra</button>
+        <div class="response" id="response-compras-post"></div>
+      </div>
+    </div>
+
+    <!-- Formularios -->
+    <div class="endpoint-section">
+      <h2>📝 Formularios</h2>
+      
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/formularios</span>
+        <button onclick="testEndpoint('GET', '/api/formularios')">Listar todos</button>
+        <div class="response" id="response-formularios-get"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3001';
+
+    async function testEndpoint(method, url, body = null) {
+      const responseId = 'response-' + url.replace(/[\/:]/g, '-').replace(/^-/, '');
+      const responseEl = document.getElementById(responseId);
+      
+      if (!responseEl) {
+        console.error('Response element not found for:', responseId);
+        return;
+      }
+
+      responseEl.textContent = 'Cargando...';
+      responseEl.className = 'response show';
+      
+      try {
+        const options = {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include'
+        };
+
+        if (body) {
+          options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(API_BASE + url, options);
+        const data = await response.json();
+        
+        responseEl.textContent = JSON.stringify(data, null, 2);
+        responseEl.className = `response show ${response.ok ? 'success' : 'error'}`;
+      } catch (error) {
+        responseEl.textContent = `Error: ${error.message}`;
+        responseEl.className = 'response show error';
+      }
+    }
+
+    function testProductoPost() {
+      const body = {
+        nombre: document.getElementById('producto-nombre').value,
+        stock: parseInt(document.getElementById('producto-stock').value),
+        url_imagen: document.getElementById('producto-imagen').value || null
+      };
+      testEndpoint('POST', '/api/productos', body);
+    }
+
+    function testAnimalPost() {
+      const body = {
+        nombre: document.getElementById('animal-nombre').value,
+        edad: document.getElementById('animal-edad').value,
+        descripcion: document.getElementById('animal-descripcion').value || null,
+        imagen_m: document.getElementById('animal-imagen').value || null
+      };
+      testEndpoint('POST', '/api/animales', body);
+    }
+
+    function testTurnoPost() {
+      const body = {
+        mascota: parseInt(document.getElementById('turno-mascota').value),
+        motivo: document.getElementById('turno-motivo').value,
+        fecha: document.getElementById('turno-fecha').value || null,
+        estado: document.getElementById('turno-estado').value
+      };
+      testEndpoint('POST', '/api/turnos', body);
+    }
+
+    function testCompraPost() {
+      const body = {
+        producto: parseInt(document.getElementById('compra-producto').value),
+        unidades: parseInt(document.getElementById('compra-unidades').value),
+        precio: parseInt(document.getElementById('compra-precio').value)
+      };
+      testEndpoint('POST', '/api/compras', body);
+    }
+  </script>
+</body>
+</html>
+

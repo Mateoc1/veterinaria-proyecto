@@ -26,12 +26,15 @@
     <!-- 🔵 BOTÓN NUEVO -->
     <button id="goRegister" class="register-btn">Crear cuenta</button>
 
-    <p id="msg"></p>
+    <% if (error) { %>
+      <p id="msg" style="color: red;"><%= error %></p>
+    <% } else { %>
+      <p id="msg"></p>
+    <% } %>
   </div>
 
   <script>
     const API = "http://localhost:3001";
-    const TARGET = "/frontend/vistas/index.html";
 
     // LOGIN
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
@@ -48,9 +51,23 @@
       const data = await res.json();
 
       if(data.ok){
-        window.location.href = TARGET;
+        // Redirigir según el rol que viene en la respuesta
+        if (data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          // Fallback: redirigir según el rol del usuario
+          const role = data.user?.role || "user";
+          if (role === "admin") {
+            window.location.href = "/admin";
+          } else if (role === "doctor" || role === "veterinario") {
+            window.location.href = "/doc";
+          } else {
+            window.location.href = "/"; // usuario normal
+          }
+        }
       } else {
         document.getElementById("msg").textContent = data.error || "Credenciales invalidas";
+        document.getElementById("msg").style.color = "red";
       }
     });
 
@@ -71,9 +88,10 @@
 
     // 🔵 IR A REGISTRO
     document.getElementById("goRegister").addEventListener("click", ()=>{
-      window.location.href = "../register/register.html";
+      window.location.href = "/register";
     });
   </script>
 
 </body>
 </html>
+

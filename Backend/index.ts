@@ -3,6 +3,12 @@ import express from "express";
 import cors from "cors";
 import { registerUser, loginUser, initAuthSchema } from "./auth/auth";
 import prisma from "./lib/prisma";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Definir __dirname para módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,17 +16,50 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Servir archivos estáticos desde frontend
+app.use(express.static(path.join(__dirname, 'frontend')));
+
 // Inicializar esquema de autenticación al arrancar
 initAuthSchema().catch(console.error);
 
-app.get("/", (_req, res) => {
+/*app.get("/", (_req, res) => {
   res.send("Servidor funcionando correctamente 🚀");
+});*/
+
+
+// Esta ruta debe existir o el archivo debe estar en static
+/*app.get('/', (req, res) => {
+  res.render('login', { title: 'Login' });
+});*/
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/vistas/index.html"));
+});
+
+app.get("/admin", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/vistas/admin.html"));
+});
+
+app.get("/register", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/vistas/register/register.html"));
+});
+
+// Rutas para otras vistas
+app.get("/adopciones", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/vistas/adopciones/adopciones.html"));
+});
+
+app.get("/tienda", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/vistas/tienda/tienda.html"));
+});
+
+app.get("/metricas", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/vistas/metricas/metricas.html"));
 });
 
 // Simple DB health check
 app.get("/db/health", async (_req, res) => {
   try {
-    // Run a lightweight query to test connection
     await prisma.$queryRaw`SELECT 1`;
     res.json({ 
       ok: true, 
@@ -65,5 +104,5 @@ app.post("/auth/login", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor disponible en el puerto ${PORT}`);
+  console.log(`Servidor disponible en http://localhost:${PORT}`);
 });
