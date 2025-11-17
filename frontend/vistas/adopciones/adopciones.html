@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Veterinaria - Consulta</title>
   <link rel="stylesheet" href="/frontend/styles/adopciones.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body id="app">
-  <header id="encabezado">
-    <div id="logo">VETERINARIA</div>
-    <nav id="nav">
-      <a class="enlace">INICIO</a>
-      <a class="enlace">ADOPTAR</a>
-      <a class="enlace">TIENDA</a>
-      <a class="enlace activo">CONSULTA</a>
-      <a class="enlace">PERFIL</a>
+  <header>
+    <nav>
+      <div class="logo"><i class="fa-solid fa-stethoscope"></i> VetCarruseles Doctor</div>
+      <ul>
+        <li><a href="/frontend/vistas/doc.html">Inicio</a></li>
+        <li><a href="https://wa.me">Consultas</a></li>
+        <li><a href="/frontend/vistas/verUsuarios/verusuario.html">Pacientes</a></li>
+        <li><a href="/frontend/vistas/Verhistorial/Acthistorial.html">Historial</a></li>
+      </ul>
     </nav>
   </header>
 
@@ -72,6 +74,6 @@
 
   <footer id="pie">© Veterinaria</footer>
 
-  <script src="/dist/adopciones.js" type="module"></script>
+  <script type="module" src="/frontend/pages/adopciones.js"></script>
 </body>
 </html>

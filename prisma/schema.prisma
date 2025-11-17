@@ -1,12 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,6 +11,88 @@ datasource db {
 }
 
 model users {
+// ============ AUTHENTICATION ============
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String?
+  lastname     String?
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         String    @default("user")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  passwordResets PasswordReset[]
+  appointments   Appointment[]
+
+  @@map("users")
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_resets")
+}
+
+// ============ PETS / ADOPTIONS ============
+model Pet {
+  id         String       @id
+  nombre     String
+  especie    String
+  foto       String?
+  adoptable  Boolean      @default(false)
+  createdAt  DateTime     @default(now()) @map("created_at")
+
+  appointments Appointment[]
+
+  @@map("pets")
+}
+
+// ============ APPOINTMENTS ============
+model Appointment {
+  id        String   @id
+  userId    Int?     @map("user_id")
+  petId     String   @map("pet_id")
+  motivo    String
+  fecha     DateTime @default(now())
+  estado    String   @default("pendiente")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  pet  Pet   @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
+}
+
+// ============ COUPONS ============
+model Coupon {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("coupons")
+}
+
+// ============ PRODUCTS ============
+model Product {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  precio    Float
+  stock     Int      @default(0)
+  urlImagen String?  @map("url_imagen")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("products")
+}
+
+// ============ LEGACY MODELS (mantener compatibilidad) ============
+model cliente {
   idusuario   Int      @id @default(autoincrement())
   name        String?
   lastname    String?

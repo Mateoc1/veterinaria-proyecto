@@ -10,11 +10,15 @@
 <body class="doctor">
   <header>
     <nav>
-      <div class="logo"><i class="fa-solid fa-stethoscope"></i> VetCarruseles Doctor</div>
+      <div class="logo">
+        <img src="/src/img/vete.jpg" alt="Logo Veterinaria Los Carruseles" class="logo-img">
+        VetCarruseles
+      </div>
       <ul>
-        <li><a href="#">Consultas</a></li>
-        <li><a href="#">Pacientes</a></li>
-        <li><a href="#">Historial</a></li>
+        <li><a href="/frontend/vistas/doc.html">Inicio</a></li>
+        <li><a href="https://wa.me">Consultas</a></li>
+        <li><a href="../vistas/verUsuarios/verusuario.html">Pacientes</a></li>
+        <li><a href="/frontend/vistas/Verhistorial/Acthistorial.html">Historial</a></li>
       </ul>
     </nav>
   </header>
@@ -27,11 +31,21 @@
   <section>
     <h2>Funciones disponibles</h2>
     <div class="cards">
-      <!-- <div class="card"><i class="fa-solid fa-inbox"></i><h3>Ver mensajes recibidos</h3></div> -->
-      <div class="card"><i class="fa-solid fa-reply"></i><h3>Responder consultas</h3></div>
+      <a href="https://wa.me">
+      <div class="card"><i class="fa-solid fa-inbox"></i><h3>Ver mensajes recibidos</h3></div>
+      </a>
+
+      <a href="../vistas/Verhistorial/Acthistorial.html">
       <div class="card"><i class="fa-solid fa-notes-medical"></i><h3>Actualizar historial clínico</h3></div>
+      </a>
+
+      <a href="/frontend/vistas/adopciones/adopciones.html">
       <div class="card"><i class="fa-solid fa-dog"></i><h3>Consultar fichas de animales</h3></div>
+      </a>
+
+      <a href="../vistas/verUsuarios/verusuario.html">
       <div class="card"><i class="fa-solid fa-user"></i><h3>Ver información del usuario</h3></div>
+      </a>
     </div>
   </section>
 
